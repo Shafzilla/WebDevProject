@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Restaurants</title>
+    <style>
+        .restaurant-item {
+            cursor: pointer;
+            margin-bottom: 10px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        
+        .menu-list {
+            list-style: none;
+            padding-left: 20px;
+            border-left: 2px solid #ddd;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Restaurants</h1>
+    <ul id="restaurant-list"></ul>
+
+    <script>
+        async function fetchDishes(restaurantId, element) {
+            const endpoint = `/api/restaurants/${restaurantId}/dishes`;
+            const res = await fetch(endpoint);
+            const dishes = await res.json();
+
+
+            let menuDiv = element.querySelector('.menu-container');
+            if (!menuDiv) {
+                menuDiv = document.createElement('div');
+                menuDiv.className = 'menu-container';
+                element.appendChild(menuDiv);
+            }
+
+
+            if (menuDiv.innerHTML !== '') {
+                menuDiv.innerHTML = '';
+            } else {
+
+                if (dishes.length === 0) {
+                    menuDiv.innerHTML = '<p style="font-style: italic;">No dishes available.</p>';
+                } else {
+                    const ul = document.createElement('ul');
+                    ul.className = 'menu-list';
+                    dishes.forEach(dish => {
+                        const li = document.createElement('li');
+
+                        const priceValue = parseFloat(dish.price);
+
+                        li.innerHTML = `
+                            <strong>${dish.name}</strong> - $${priceValue.toFixed(2)} 
+                            <br> 
+                            <small>${dish.description}</small>
+                        `;
+                        ul.appendChild(li);
+                    });
+                    menuDiv.appendChild(ul);
+                }
+            }
+        }
+
+
+        async function fetchRestaurants() {
+            const res = await fetch('/api/restaurants');
+            const data = await res.json();
+
+            const list = document.getElementById('restaurant-list');
+            data.forEach(r => {
+                const li = document.createElement('li');
+                li.className = 'restaurant-item';
+
+                const addressButton = document.createElement('button');
+                addressButton.textContent = 'Show Address';
+                addressButton.style.marginLeft = '10px';
+                addressButton.style.padding = '4px 8px';
+                addressButton.style.cursor = 'pointer';
+
+                addressButton.dataset.restaurantId = r.id;
+                addressButton.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    displayAddress(r.address, addressButton);
+                });
+
+                li.innerHTML = `
+                    <div style="display: flex; align-items: center;">
+                        
+                        <h3>${r.name} (${r.cuisine_type})</h3>
+                        <span style="margin-left: auto;">Rating: ${r.rating} / 5</span>
+                        </div>
+                        <p style="margin: 4px 0 0 0; font-style: italic;">Click to view menu</p>
+                `;
+
+                li.querySelector('div').appendChild(addressButton);
+
+                li.addEventListener('click', () => {
+                    fetchDishes(r.id, li);
+                });
+
+                list.appendChild(li);
+            });
+        }
+
+        function displayAddress(address, buttonElement) {
+
+            const addressID = `address-${buttonElement.dataset.restaurantId}`;
+            let addressDisplay = document.getElementById(addressID);
+            if (addressDisplay) {
+                addressDisplay.remove();
+                buttonElement.textContent = 'Show Address';
+                buttonElement.style.backgroundColor = '';
+            } else {
+                addressDisplay = document.createElement('p');
+                addressDisplay.id = addressID;
+                addressDisplay.textContent = `Address: ${address}`;
+                addressDisplay.style.fontWeight = 'bold';
+
+                const li = buttonElement.closest('.restaurant-item');
+
+                const contentDiv = li.querySelector('div');
+                contentDiv.after(addressDisplay);
+
+
+                buttonElement.textContent = 'Hide Address';
+                buttonElement.style.backgroundColor = '#d3d3d3';
+
+
+            }
+
+        }
+
+        fetchRestaurants();
+    </script>
+</body>
+
+</html>
