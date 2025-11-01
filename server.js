@@ -10,7 +10,7 @@ app.use(express.static(path.join(__dirname, 'app/view')));
 
 
 app.get('/', (req, res) => {
-    res.redirect('/restaurants');
+    res.redirect('/index');
 });
 
 
