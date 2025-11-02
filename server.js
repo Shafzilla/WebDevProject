@@ -19,8 +19,17 @@ app.get('/api/restaurants', listRestaurants);
 
 app.get('/api/restaurants/:id/dishes', listDishes);
 
+app.get('/restaurants/:id/dishes', (req, res) => {
+    res.sendFile(path.join(__dirname, 'app/view/restaurantDetail.html'));
+});
+
+
 app.get('/restaurants', (req, res) => {
     res.sendFile(path.join(__dirname, 'app/view/restaurants.html'));
+});
+
+app.get('/detail', (req, res) => {
+    res.sendFile(path.join(__dirname, 'app/view/restaurantDetail.html'));
 });
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
