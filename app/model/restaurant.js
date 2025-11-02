@@ -14,6 +14,10 @@ const getDishesByRestaurantId = async(restaurantId) => {
     return result.rows;
 };
 
+const deleteRestaurant = async(restaurantId) => {
+
+}
+
 module.exports = {
     getAllRestaurants,
     getDishesByRestaurantId
