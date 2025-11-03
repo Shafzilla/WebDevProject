@@ -9,60 +9,101 @@
     <style>
 
         .menu-list-item{
-            height: 100%;
-            width: 100%;
+            /*height: 100%;*/
+            /*width: 100%;*/
+            border: 1px solid #ccc;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 
         }
+
+        .menu-list-item:hover{
+
+            background-color: #ccc;
+
+        }
+
+        .no-dishes-found-style {
+
+            margin: auto;
+            width: 50%;
+            padding: 10px;
+        }
+
 
 
 
     </style>
 </head>
 <body>
-    <p>hello</p>
+    <nav class="navbar bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <img src="https://media.istockphoto.com/id/1276417606/vector/fork-knife-and-spoon-icon-logo-simple-flat-shape-sign-restaurant-cafe-kitchen-diner-place.jpg?s=612x612&w=0&k=20&c=jTFePmR22yEBLGFHvh5QaLoEVPjE08ZzseaXpJqj0v4=" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+                WebDevProject
+            </a>
+        </div>
+    </nav>
     <div class="container py-4">
-        <h1 class="text-center mb-4">Restaurants</h1>
-        <ul id="restaurant-list" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 list-unstyled"></ul>
+        <h1 class="text-center mb-4">Dishes</h1>
+        <ul id="dish-list" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 list-unstyled"></ul>
 
     </div>
     <script>
 
 
 
-        async function fetchRestaurants(restaurantId) {
+        async function fetchDishesByRestaurantId(restaurantId) {
 
             const res = await fetch(`/api/restaurants/${restaurantId}/dishes`);
             const data = await res.json();
 
-            const list = document.getElementById('restaurant-list');
-            data.forEach(r => {
-                const colDiv = document.createElement('div');
-                colDiv.className = 'col';
+            if (data.length === 0) {
 
-
-                const li = document.createElement('li');
-                li.className = 'menu-list-item p-4 shadow-sm';
+                const place = document.getElementById('dish-list');
+                const noDishesText = document.createElement('p');
+                noDishesText.innerHTML = `
+                    <p class="container p-5">...No dishes found</p>
 
 
 
-                li.innerHTML = `
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="d-flex align-items-center">
-                            <h3>${r.name}</h3>
-                            <span class="ms-3 me-4 text-end">
-                                Rating: <br>
-                                <span class="text-primary fw-bold">${r.description}</span>
-                            </span>
+                `
+                place.appendChild(noDishesText);
+
+
+            }
+            else {
+
+
+                const list = document.getElementById('dish-list');
+                data.forEach(r => {
+                    const colDiv = document.createElement('div');
+                    colDiv.className = 'col';
+
+
+                    const li = document.createElement('li');
+                    li.className = 'menu-list-item p-4 shadow-sm';
+
+
+                    li.innerHTML = `
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <h3>${r.name}</h3>
+                                <span class="ms-3 me-4 text-end">
+                                     <br>
+                                    <span class="text-primary fw-light">${r.description}</span>
+                                    <p>$${r.price}</p>
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                    <p class="text-secondary small mt-2 fst-italic">Click to view menu</p>
-                `;
+                        <p class="text-secondary small mt-2 fst-italic"></p>
+                    `;
 
 
-                colDiv.appendChild(li);
+                    colDiv.appendChild(li);
 
-                list.appendChild(colDiv);
-            });
+                    list.appendChild(colDiv);
+                });
+            }
         }
 
         function getRestaurantId() {
@@ -78,7 +119,7 @@
         }
 
         restaurantId = getRestaurantId()
-        fetchRestaurants(restaurantId);
+        fetchDishesByRestaurantId(restaurantId);
 
     </script>
 

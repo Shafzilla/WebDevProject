@@ -166,8 +166,6 @@
 
         async function fetchRestaurants() {
 
-            const listContainer = document.getElementById('restaurant-list');
-
             const res = await fetch('/api/restaurants');
             const data = await res.json();
 
@@ -212,8 +210,7 @@
 
                 const mainContentDiv = li.querySelector('.d-flex.justify-content-between');
 
-                mainContentDiv.appendChild(addressButton
-                );
+                mainContentDiv.appendChild(addressButton);
                 li.querySelector('div').appendChild(addressButton);
 
                 li.addEventListener('click', () => {
