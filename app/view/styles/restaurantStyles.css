@@ -1,0 +1,64 @@
+.restaurant-item {
+    cursor: pointer;
+    /*margin-bottom: 0;*/
+    /*padding: 15px;*/
+    /*padding-top: 50px;*/
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    /*width: 60%;*/
+    /*margin-left: auto;*/
+    /*margin-right: auto;*/
+    color: black;
+    background-color: whitesmoke;
+    /*box-shadow: 0 4px 8px rgba(0,0,0,0.1);*/
+    /*width: 100%;*/
+    /*height: 100%;*/
+    font-family: JETSansDigital,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Arial,sans-serif;
+
+    margin-bottom: 2px;
+    transition: transform 0.2s;
+
+}
+.restaurant-item:hover {
+    background-color: #f3ad67;
+}
+
+.restaurant-item-container {
+    display: flex;
+
+}
+
+.address-button-style {
+    background-color: #dddddd;
+    color: black;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    padding: 10px;
+    height: 100%;
+}
+
+
+.menu-list {
+    list-style: none;
+    padding-left: 20px;
+    border-left: 2px solid #ddd;
+    margin-top: 5px;
+}
+
+.body-style {
+
+    background-color: white;
+
+}
+
+.navbar-style {
+
+
+    background-color: rgba(255, 0, 0, 0.3);
+
+}
+
+.rating-star-image {
+    height: 12px;
+    width: 12px;
+}

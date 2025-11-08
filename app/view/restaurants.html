@@ -6,96 +6,80 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" xintegrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
+    <link rel="stylesheet" href="/styles/restaurantStyles.css">
     <style>
-        .restaurant-item {
-            cursor: pointer;
-            /*margin-bottom: 0;*/
-            /*padding: 15px;*/
-            /*padding-top: 50px;*/
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            /*width: 60%;*/
-            /*margin-left: auto;*/
-            /*margin-right: auto;*/
-            color: black;
-            background-color: #e9f3f2;
-            /*box-shadow: 0 4px 8px rgba(0,0,0,0.1);*/
-            /*width: 100%;*/
-            /*height: 100%;*/
-            font-family: JETSansDigital,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Arial,sans-serif;
-
-            transition: transform 0.2s;
-
+        .rating-star-image {
+            height: 12px;
+            width: 12px;
         }
-        .restaurant-item:hover {
-            background-color: #f5f5f5;
-        }
-
-        .restaurant-item-container {
-            display: flex;
-
-        }
-
-        .address-button-style {
-            background-color: #dddddd;
-            color: black;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            border-radius: 10px;
-            padding: 10px;
-            height: 100%;
-        }
-
-        
-        .menu-list {
-            list-style: none;
-            padding-left: 20px;
-            border-left: 2px solid #ddd;
-            margin-top: 5px;
-        }
-
-        .body-style {
-
-            background-color: white;
-
-        }
-
-        .navbar-style {
-
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-
-        }
-
-
-
     </style>
 </head>
 
 <body class="body-style">
 
-
-
-    <nav class="navbar bg-body-tertiary">
+    <!--Responsive top navigation bar that turns to a burger button on smaller screens-->
+    <nav class="navbar sticky-top bg-body-tertiary navbar-expand-lg navbar-style">
         <div class="container-fluid">
+
             <a class="navbar-brand" href="/">
                 <img src="https://media.istockphoto.com/id/1276417606/vector/fork-knife-and-spoon-icon-logo-simple-flat-shape-sign-restaurant-cafe-kitchen-diner-place.jpg?s=612x612&w=0&k=20&c=jTFePmR22yEBLGFHvh5QaLoEVPjE08ZzseaXpJqj0v4=" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
                 WebDevProject
             </a>
+
+            <button
+                    class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#unifiedNavbarContent"
+                    aria-controls="unifiedNavbarContent"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+            >
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="unifiedNavbarContent">
+
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/">Home</a>
+                    </li>
+                </ul>
+
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+
+            </div>
+
         </div>
     </nav>
+<!--    <nav class="navbar bg-body-tertiary">-->
+<!--        -->
+<!--        -->
+<!--        -->
+<!--        <div class="container-fluid">-->
+<!--            <a class="navbar-brand" href="/">-->
+<!--                <img src="https://media.istockphoto.com/id/1276417606/vector/fork-knife-and-spoon-icon-logo-simple-flat-shape-sign-restaurant-cafe-kitchen-diner-place.jpg?s=612x612&w=0&k=20&c=jTFePmR22yEBLGFHvh5QaLoEVPjE08ZzseaXpJqj0v4=" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">-->
+<!--                WebDevProject-->
+<!--            </a>-->
+<!--        </div>-->
+<!--    </nav>-->
 
 
 
 
 
-    <nav class="navbar sticky-top bg-body-tertiary navbar-style">
-        <div class="container-fluid">
-            <a class="navbar-brand">Navbar</a>
-            <form class="d-flex" role="search">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-                <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
-        </div>
-    </nav>
+<!--    <nav class="navbar sticky-top bg-body-tertiary navbar-style">-->
+<!--        <div class="container-fluid">-->
+<!--            <a class="navbar-brand">Navbar</a>-->
+<!--            <form class="d-flex" role="search">-->
+<!--                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>-->
+<!--                <button class="btn btn-outline-success" type="submit">Search</button>-->
+<!--            </form>-->
+<!--        </div>-->
+<!--    </nav>-->
 
 
 
@@ -114,152 +98,10 @@
 
     </div>
 
-    <script>
-        async function fetchDishes(restaurantId, element) {
-            const endpoint = `/api/restaurants/${restaurantId}/dishes`;
-            const res = await fetch(endpoint);
-            const dishes = await res.json();
+    <script src="restaurantView.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
-            let menuDiv = element.querySelector('.menu-container');
-            if (!menuDiv) {
-                menuDiv = document.createElement('div');
-
-                menuDiv.className = 'menu-container mt-3';
-                element.appendChild(menuDiv);
-            }
-
-
-            if (menuDiv.innerHTML !== '') {
-                menuDiv.innerHTML = '';
-            } else {
-
-                if (dishes.length === 0) {
-                    menuDiv.innerHTML = '<p class="text-muted fst-italic">No dishes available.</p>';
-                } else {
-                    const ul = document.createElement('ul');
-                    ul.className = 'menu-list';
-                    ul.classList.add('list-unstyled', 'mt-3');
-
-                    dishes.forEach(dish => {
-                        const li = document.createElement('li');
-                        li.className = 'dish-item';
-
-                        const priceValue = parseFloat(dish.price);
-
-                        li.innerHTML = `
-                            <div class="d-flex justify-content-between align-items-baseline">
-                                <div>
-                                    <strong>${dish.name}:</strong>
-                                    <small class="text-muted d-block">${dish.description}</small>
-                                </div>
-                                <span class="fw-bold text-success">$${priceValue.toFixed(2)}</span>
-                            </div>
-                        `;
-                        ul.appendChild(li);
-                    });
-                    menuDiv.appendChild(ul);
-                }
-            }
-        }
-
-
-        async function fetchRestaurants() {
-
-            const res = await fetch('/api/restaurants');
-            const data = await res.json();
-
-            const list = document.getElementById('restaurant-list');
-            data.forEach(r => {
-                const colDiv = document.createElement('div');
-                colDiv.className = 'col';
-
-
-                const li = document.createElement('li');
-                li.className = 'restaurant-item p-4 shadow-sm';
-
-                const link = document.createElement('a')
-                link.href = `/restaurants/` + r.id + `/dishes`;
-
-
-                const addressButton = document.createElement('button');
-                addressButton.className = 'btn btn-outline-secondary btn-sm';
-                addressButton.textContent = 'Show Address';
-                // addressButton.style.marginLeft = '10px';
-                // addressButton.style.padding = '4px 8px';
-                addressButton.style.cursor = 'pointer';
-
-                addressButton.dataset.restaurantId = r.id;
-                addressButton.addEventListener('click', (event) => {
-                    event.stopPropagation();
-                    displayAddress(r.address, addressButton);
-                });
-
-                li.innerHTML = `
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="d-flex align-items-center">
-                            <h3>${r.name}</h3>
-                            <span class="ms-3 me-4 text-end">
-                                Rating: <br>
-                                <span class="text-primary fw-bold">${r.rating}</span>
-                            </span>
-                        </div>
-                    </div>
-                    <p class="text-secondary small mt-2 fst-italic" >click for menu</p>
-                `;
-
-                const mainContentDiv = li.querySelector('.d-flex.justify-content-between');
-
-                mainContentDiv.appendChild(addressButton);
-                li.querySelector('div').appendChild(addressButton);
-
-                li.addEventListener('click', () => {
-                    window.location.href = "/restaurants/" + r.id + "/dishes";
-                    // fetchDishes(r.id, li);
-                });
-
-
-                li.appendChild(link)
-
-
-                colDiv.appendChild(li);
-
-
-
-                list.appendChild(colDiv);
-            });
-        }
-
-        function displayAddress(address, buttonElement) {
-
-            const addressID = `address-${buttonElement.dataset.restaurantId}`;
-            let addressDisplay = document.getElementById(addressID);
-            if (addressDisplay) {
-                addressDisplay.remove();
-                buttonElement.textContent = 'Show Address';
-                buttonElement.style.backgroundColor = '';
-            } else {
-                addressDisplay = document.createElement('p');
-                addressDisplay.id = addressID;
-                addressDisplay.textContent = `Address: ${address}`;
-                addressDisplay.style.fontWeight = 'bold';
-
-                const li = buttonElement.closest('.restaurant-item');
-
-                const contentDiv = li.querySelector('div');
-                contentDiv.after(addressDisplay);
-
-
-                buttonElement.textContent = 'Hide Address';
-                buttonElement.style.backgroundColor = '#d3d3d3';
-
-
-            }
-
-        }
-
-        fetchRestaurants();
-    </script>
 </body>
 
 </html>

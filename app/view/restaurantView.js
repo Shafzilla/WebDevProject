@@ -1,0 +1,99 @@
+async function fetchRestaurants() {
+
+    const res = await fetch('/api/restaurants');
+    const data = await res.json();
+
+    const list = document.getElementById('restaurant-list');
+
+    data.forEach(r => {
+        const colDiv = document.createElement('div');
+        colDiv.className = 'col';
+
+
+
+
+        const li = document.createElement('li');
+        li.className = 'restaurant-item p-4 shadow-sm';
+
+
+        const link = document.createElement('a')
+        link.href = `/restaurants/` + r.id + `/dishes`;
+
+
+        const addressButton = document.createElement('button');
+        addressButton.className = 'btn btn-outline-secondary btn-sm';
+        addressButton.textContent = 'Show Address';
+        // addressButton.style.marginLeft = '10px';
+        // addressButton.style.padding = '4px 8px';
+        addressButton.style.cursor = 'pointer';
+
+        addressButton.dataset.restaurantId = r.id;
+        addressButton.addEventListener('click', (event) => {
+            event.stopPropagation();
+            displayAddress(r.address, addressButton);
+        });
+
+        li.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            <h3>${r.name}</h3>
+
+                            <img src="https://icon-library.com/images/rating-star-icon-png/rating-star-icon-png-8.jpg"class="rating-star-image"><p class="text-primary fw-bold">${r.rating}</p>
+                            <br>
+
+                        </div>
+                    </div>
+                    <p class="text-secondary small mt-2 fst-italic" ></p>
+                `;
+
+        const mainContentDiv = li.querySelector('.d-flex.justify-content-between');
+
+        mainContentDiv.appendChild(addressButton);
+        li.querySelector('div').appendChild(addressButton);
+
+        li.addEventListener('click', () => {
+            window.location.href = "/restaurants/" + r.id + "/dishes";
+            // fetchDishes(r.id, li);
+        });
+
+
+        li.appendChild(link)
+
+
+        colDiv.appendChild(li);
+
+
+
+        list.appendChild(colDiv);
+    });
+}
+
+function displayAddress(address, buttonElement) {
+
+    const addressID = `address-${buttonElement.dataset.restaurantId}`;
+    let addressDisplay = document.getElementById(addressID);
+    if (addressDisplay) {
+        addressDisplay.remove();
+        buttonElement.textContent = 'Show Address';
+        buttonElement.style.backgroundColor = '';
+    } else {
+        addressDisplay = document.createElement('p');
+        addressDisplay.id = addressID;
+        addressDisplay.textContent = `Address: ${address}`;
+        addressDisplay.style.fontWeight = 'bold';
+
+        const li = buttonElement.closest('.restaurant-item');
+
+        const contentDiv = li.querySelector('div');
+        contentDiv.after(addressDisplay);
+
+
+        buttonElement.textContent = 'Hide Address';
+        buttonElement.style.backgroundColor = '#d3d3d3';
+
+
+    }
+
+}
+
+fetchRestaurants();
