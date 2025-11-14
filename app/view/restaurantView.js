@@ -2,6 +2,7 @@ async function fetchRestaurants() {
 
     const res = await fetch('/api/restaurants');
     const data = await res.json();
+    console.log(data);
 
     const list = document.getElementById('restaurant-list');
 
@@ -33,17 +34,19 @@ async function fetchRestaurants() {
             displayAddress(r.address, addressButton);
         });
 
+
+
         li.innerHTML = `
+                    <img src="${r.image_url}" alt="${r.name}" class="restaurant-img mb-2">
+                    
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="d-flex align-items-center">
                             <h3>${r.name}</h3>
 
-                            <img src="https://icon-library.com/images/rating-star-icon-png/rating-star-icon-png-8.jpg"class="rating-star-image"><p class="text-primary fw-bold">${r.rating}</p>
-                            <br>
-
+                            <img src="https://icon-library.com/images/rating-star-icon-png/rating-star-icon-png-8.jpg" class="rating-star-image">
+                            <p class="text-primary fw-bold">${r.rating}</p>
                         </div>
                     </div>
-                    <p class="text-secondary small mt-2 fst-italic" ></p>
                 `;
 
         const mainContentDiv = li.querySelector('.d-flex.justify-content-between');

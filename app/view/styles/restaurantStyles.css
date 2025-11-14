@@ -1,9 +1,18 @@
+.restaurant-img {
+    width: 100%;        
+    height: 150px;      
+    object-fit: cover;  
+    border-radius: 10px;
+    display: block;      
+    margin-bottom: 10px;
+}
+
+
 .restaurant-item {
     cursor: pointer;
     /*margin-bottom: 0;*/
     /*padding: 15px;*/
     /*padding-top: 50px;*/
-    border: 1px solid #ccc;
     border-radius: 10px;
     /*width: 60%;*/
     /*margin-left: auto;*/
@@ -20,7 +29,7 @@
 
 }
 .restaurant-item:hover {
-    background-color: #f3ad67;
+    background-color: #ffffff;
 }
 
 .restaurant-item-container {
@@ -45,20 +54,245 @@
     margin-top: 5px;
 }
 
-.body-style {
 
-    background-color: white;
-
-}
-
-.navbar-style {
-
-
-    background-color: rgba(255, 0, 0, 0.3);
-
-}
 
 .rating-star-image {
     height: 12px;
     width: 12px;
+}
+
+
+
+/*-------------------------------------------------------------------------------*/
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+.whole-page {
+    border-radius: 10px;
+}
+
+.navbar .container-fluid {
+    max-width: 100%;       /* don’t exceed viewport width */
+    overflow-x: hidden;    /* prevent horizontal scroll */
+    padding-left: 15px;    /* Bootstrap default padding */
+    padding-right: 15px;
+    box-sizing: border-box; /* include padding in width */
+}
+
+
+
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background-color: white;
+}
+
+
+
+.restaurant {
+  border: 1px solid #ccc;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+}
+
+
+
+.banner {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: center;
+    background-color: white;
+    width: 100%;
+}
+
+a{
+    text-decoration: none;
+    color: black;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-grow: 1; 
+    margin-right: 20px;
+}
+
+.shopping-cart {
+    margin-right: 150px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-grow: 1; 
+}
+
+
+
+
+
+
+/* For small screens, reset padding  for search container*/
+/* matches Bootstrap lg breakpoint */
+@media (max-width: 991px) { 
+    .search-container, .shopping-cart {
+        padding-left: 0;
+        flex-direction: row; 
+        width: 100%; 
+    }
+}
+
+.search-bar, .signup-decor{
+    display: flex;
+    align-items: center;
+    background-color: #f5f5f5;
+    border-radius: 25px;
+    padding: 11px 15px;
+    flex-grow: 1;
+    min-width: 120px; /* ensures it doesn’t get too small */
+    flex: 1;           /* takes remaining space */
+    max-width: 500px;  /* optional limit */
+}
+
+.search-bar input {
+    background-color: #f5f5f5;
+    color: rgb(58, 56, 56);  
+    border: none;
+    outline: none;
+    flex: 1;
+    font-size: 16px;
+    padding-right: 50px;
+}
+
+
+.search-bar i {
+    margin-right: 10px;
+    color: #272727;
+}
+
+.search-button {
+    background-color: #00b14f;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.search-button:hover {
+    background-color: #00963f;
+}
+
+
+i.fas.fa-shopping-cart {
+    font-size: 24px;
+    color: black;
+}
+
+.auth-links {
+    display: flex;
+    align-items: center;
+    gap: 20px; 
+}
+
+
+
+.cuisine {
+    display: flex;
+    flex-direction: column;   
+    align-items: center;
+    text-decoration: none;    
+    font-size: 50px;          
+    transition: transform 0.2s, filter 0.2s;
+    background-color: #f5f5f5;
+    border-radius: 15px;
+    padding: 15px;
+    width: 90px;
+}
+
+.cuisine span {
+    font-size: 16px;
+    color: #333;
+    margin-top: 8px;
+}
+
+/* when hovering or pressing */
+.cuisine:hover {
+    transform: scale(1.1);
+    filter: brightness(1.2);
+}
+
+/* slight tilt and highlight on click */
+.cuisine:active {
+    transform: rotate(-10deg) scale(1.1);
+    filter: brightness(1.4);
+}
+
+
+
+.cuisine-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.cuisine-list {
+    display: flex;
+    gap: 25px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding-bottom: 5px;
+}
+
+/* Hide scrollbar for a clean look */
+.cuisine-list::-webkit-scrollbar {
+    display: none;
+}
+
+.cuisine-list {
+    /* IE and Edge */
+    -ms-overflow-style: none;  
+    /* Firefox */
+    scrollbar-width: none;  
+}
+
+/* Scroll buttons */
+.scroll-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255,255,255,0.8);
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 10;
+    /* only show on small screens */
+    display: none; 
+    padding: 5px 10px;
+    border-radius: 50%;
+}
+
+.left-btn {
+    left: 0;
+}
+
+.right-btn {
+    right: 0;
+}
+
+/* Show buttons only on small screens */
+@media (max-width: 991px) {
+    .scroll-btn {
+        display: block;
+    }
 }

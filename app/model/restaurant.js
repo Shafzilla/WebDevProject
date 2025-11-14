@@ -1,7 +1,7 @@
 const pool = require('../config/database');
 
 const getAllRestaurants = async() => {
-    const result = await pool.query('SELECT id, name, cuisine_type, rating, address FROM restaurants ORDER BY id');
+    const result = await pool.query('SELECT id, name, image_url, cuisine_type, rating, address FROM restaurants ORDER BY id');
     return result.rows;
 };
 
