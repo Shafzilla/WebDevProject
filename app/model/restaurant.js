@@ -18,6 +18,8 @@ const deleteRestaurant = async(restaurantId) => {
 
 }
 
+
+
 module.exports = {
     getAllRestaurants,
     getDishesByRestaurantId
