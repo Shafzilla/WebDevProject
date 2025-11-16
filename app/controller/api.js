@@ -1,5 +1,5 @@
 const { getAllRestaurants, getDishesByRestaurantId } = require('../model/restaurant');
-const { createUser } = require('../model/users');
+const { createUser, getUserByUsername} = require('../model/users');
 const bcrypt = require('bcrypt');
 
 
@@ -49,8 +49,41 @@ async function signUp(req, res) {
 
 }
 
+async function login(req, res) {
+
+    const { username, password } = req.body;
+
+    const user = await getUserByUsername(username)
+
+    if (!user) {
+
+        return res.status(400).send('User does not exist');
+
+    }
+
+    const checkPassword = await bcrypt.compare(password, user.password_hash);
+
+    if (!checkPassword) {
+
+        return res.status(401).send('User does not exist');
+
+    }
+
+    // window.location.href = "/";
+
+    return res.status(200).json({
+
+        message: 'login successfull',
+        userId: user.id,
+        username: user.username,
+
+    })
+
+}
+
 module.exports = {
     listRestaurants,
     listDishes,
-    signUp
+    signUp,
+    login
 };

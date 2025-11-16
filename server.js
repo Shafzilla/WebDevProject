@@ -1,7 +1,7 @@
 const express = require('express');
 
 const path = require('path');
-const { listRestaurants, listDishes, signUp} = require('./app/controller/api');
+const { listRestaurants, listDishes, signUp, login} = require('./app/controller/api');
 
 const app = express();
 const PORT = 5000;
@@ -43,5 +43,12 @@ app.get('/signup', (req, res) => {
 })
 
 app.post('/api/signup', signUp);
+
+app.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, 'app/view/login.html'));
+})
+
+app.post('/api/login', login);
+
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

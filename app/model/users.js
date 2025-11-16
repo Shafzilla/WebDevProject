@@ -1,5 +1,5 @@
 const pool = require('../config/database');
-const {listDishes} = require("../controller/api");
+
 
 async function createUser(username, email, passwordHash){
 
@@ -10,7 +10,7 @@ async function createUser(username, email, passwordHash){
     `;
     const values = [username, email, passwordHash];
 
-    const result = await pool.query(
+    await pool.query(
         queryText,
         values
     );
@@ -18,6 +18,22 @@ async function createUser(username, email, passwordHash){
 
 }
 
+
+async function getUserByUsername(username){
+
+    const queryText = `
+        SELECT id, username, email, password_hash FROM users WHERE username = $1;
+    
+    `;
+    const values = [username];
+
+    const result = await pool.query(queryText, values);
+
+    return result.rows[0] || null;
+}
+
+
 module.exports = {
-    createUser
+    createUser,
+    getUserByUsername
 };

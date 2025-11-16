@@ -19,5 +19,7 @@ document.getElementById("signup-form").addEventListener("submit", async function
 
     await response.json();
 
+    window.location.href = "/";
+
 
 })
