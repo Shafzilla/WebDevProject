@@ -57,7 +57,7 @@ async function login(req, res) {
 
     if (!user) {
 
-        return res.status(400).send('User does not exist');
+        return res.status(401).send('User does not exist');
 
     }
 
@@ -70,6 +70,8 @@ async function login(req, res) {
     }
 
     // window.location.href = "/";
+
+
 
     return res.status(200).json({
 
