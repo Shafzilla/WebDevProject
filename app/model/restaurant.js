@@ -18,12 +18,6 @@ const deleteRestaurant = async(restaurantId) => {
 
 }
 
-<<<<<<< Updated upstream
-module.exports = {
-    getAllRestaurants,
-    getDishesByRestaurantId
-=======
-
 
 
 
@@ -106,5 +100,4 @@ module.exports = {
     addToBasket,
     deleteBasketItem,
     updateBasketQuantity
->>>>>>> Stashed changes
 };
