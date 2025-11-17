@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS basket;
 DROP TABLE IF EXISTS orders;
 DROP TABLE IF EXISTS dishes;
 DROP TABLE IF EXISTS restaurants;
@@ -59,6 +60,20 @@ CREATE TABLE orders (
     status VARCHAR(20), -- e.g. pending, delivered, cancelled
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+
+-- ===========================================
+-- basket
+-- Each basket belongs to a user 
+-- If a user is deleted, their basket is deleted automatically
+-- ===========================================
+CREATE TABLE basket (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    dish_id INTEGER REFERENCES dishes(id) ON DELETE CASCADE,
+    quantity INTEGER DEFAULT 1
+);
+
 
 
 INSERT INTO restaurants ("name", image_url, cuisine_type,rating,address,latitude,longitude,created_at) VALUES
