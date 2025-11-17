@@ -31,6 +31,12 @@ async function fetchDishesByRestaurantId(restaurantId) {
                                      <br>
                                     <span class="text-primary fw-light">${r.description}</span>
                                     <p>$${r.price}</p>
+
+                                    <button 
+                                        class="btn btn-sm btn-success mt-2"
+                                        onclick="addToBasket(${r.id})">
+                                        Add to Basket
+                                    </button>
                                 </span>
                             </div>
                         </div>
@@ -58,9 +64,6 @@ function getRestaurantId() {
 }
 
 restaurantId = getRestaurantId()
-<<<<<<< Updated upstream
-fetchDishesByRestaurantId(restaurantId);
-=======
 fetchDishesByRestaurantId(restaurantId);
 
 
@@ -93,4 +96,3 @@ async function addToBasket(dishId) {
         }
     }
 }
->>>>>>> Stashed changes
