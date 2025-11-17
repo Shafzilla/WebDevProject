@@ -40,6 +40,7 @@ CREATE TABLE dishes (
     id SERIAL PRIMARY KEY,
     restaurant_id INTEGER REFERENCES restaurants(id) ON DELETE CASCADE,
     name VARCHAR(100) NOT NULL,
+    dish_url TEXT,
     description TEXT,
     price DECIMAL(6,2),
     available BOOLEAN DEFAULT TRUE,
@@ -61,6 +62,24 @@ CREATE TABLE orders (
 );
 
 
+<<<<<<< Updated upstream
+=======
+-- ===========================================
+-- basket
+-- Each basket belongs to a user 
+-- If a user is deleted, their basket is deleted automatically
+-- ===========================================
+CREATE TABLE basket (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    dish_id INTEGER REFERENCES dishes(id) ON DELETE CASCADE,
+    quantity INTEGER DEFAULT 1,
+    UNIQUE(user_id, dish_id)
+);
+
+
+
+>>>>>>> Stashed changes
 INSERT INTO restaurants ("name", image_url, cuisine_type,rating,address,latitude,longitude,created_at) VALUES
     ('Pizza hut', 'https://tb-static.uber.com/prod/image-proc/processed_images/2aa841d85d959a0667efddc7834e915b/3ac2b39ad528f8c8c5dc77c59abb683d.jpeg', 'Italian',4.4,'Dublin 15',NULL,NULL,'2025-11-03 09:20:07.325451'),
     ('Apache Pizza', 'https://www.westend.ie/wp-content/uploads/2021/03/apache-pizza-web.png', 'Italian',4.0,'Dublin 15',NULL,NULL,'2025-11-03 09:20:07.325451'),
