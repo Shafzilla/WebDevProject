@@ -62,8 +62,7 @@ CREATE TABLE orders (
 );
 
 
-<<<<<<< Updated upstream
-=======
+
 -- ===========================================
 -- basket
 -- Each basket belongs to a user 
@@ -79,7 +78,6 @@ CREATE TABLE basket (
 
 
 
->>>>>>> Stashed changes
 INSERT INTO restaurants ("name", image_url, cuisine_type,rating,address,latitude,longitude,created_at) VALUES
     ('Pizza hut', 'https://tb-static.uber.com/prod/image-proc/processed_images/2aa841d85d959a0667efddc7834e915b/3ac2b39ad528f8c8c5dc77c59abb683d.jpeg', 'Italian',4.4,'Dublin 15',NULL,NULL,'2025-11-03 09:20:07.325451'),
     ('Apache Pizza', 'https://www.westend.ie/wp-content/uploads/2021/03/apache-pizza-web.png', 'Italian',4.0,'Dublin 15',NULL,NULL,'2025-11-03 09:20:07.325451'),
@@ -101,3 +99,11 @@ INSERT INTO dishes (restaurant_id,"name",description,price,available,created_at)
     (1,'Veggie Pizza',NULL,10.99,true,'2025-11-03 09:20:07.325451'),
     (2,'Classic Burger',NULL,9.50,true,'2025-11-03 09:20:07.325451'),
     (2,'Cheese Fries',NULL,4.25,true,'2025-11-03 09:20:07.325451');
+
+
+INSERT INTO users (username, email, password_hash) VALUES
+    ('hanna', 'hana@gmail.com', 'qw');
+  
+
+INSERT INTO basket (user_id, dish_id, quantity) VALUES
+    (1,1,1);
