@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-const { listRestaurants, listDishes, getBasket, addToBasket} = require('./app/controller/api');
+const { listRestaurants, listDishes, listBasket, createBasketItem} = require('./app/controller/api');
 
 
 
@@ -38,7 +38,9 @@ app.get('/detail', (req, res) => {
     res.sendFile(path.join(__dirname, 'app/view/restaurantDetail.html'));
 });
 
-
+app.get('/basket', (req, res) => {
+    res.sendFile(path.join(__dirname, 'app/view/basket.html'));
+})
 
 
 app.get('/api/basket', listBasket);
