@@ -1,6 +1,3 @@
-<<<<<<< Updated upstream
-const { getAllRestaurants, getDishesByRestaurantId } = require('../model/restaurant');
-=======
 const { getAllRestaurants,
         getDishesByRestaurantId, 
         getBasket, 
@@ -12,7 +9,6 @@ const { getAllRestaurants,
 
 
 // ---------------- Restaurants ----------------
->>>>>>> Stashed changes
 
 const listRestaurants = async(req, res) => {
     try {
@@ -36,11 +32,6 @@ const listDishes = async(req, res) => {
     }
 };
 
-<<<<<<< Updated upstream
-module.exports = {
-    listRestaurants,
-    listDishes
-=======
 
 
 
@@ -139,5 +130,4 @@ module.exports = {
     createBasketItem,
     removeBasketItem,
     changeBasketQuantity
->>>>>>> Stashed changes
 };
