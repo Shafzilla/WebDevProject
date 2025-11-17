@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 const { Pool } = require('pg');
+const { listRestaurants, listDishes } = require('./app/controller/api');
 
 const pool = new Pool({
     host: process.env.DB_HOST,

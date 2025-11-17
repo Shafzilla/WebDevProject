@@ -1,12 +1,16 @@
 const express = require('express');
 const path = require('path');
-const { listRestaurants, listDishes } = require('./app/controller/api');
+const { listRestaurants, listDishes, getBasket, addToBasket} = require('./app/controller/api');
+
+
 
 const app = express();
 const PORT = 5000;
 
 
 app.use(express.static(path.join(__dirname, 'app/view')));
+
+app.use(express.json());
 
 
 app.get('/', (req, res) => {
@@ -33,6 +37,12 @@ app.get('/restaurants', (req, res) => {
 app.get('/detail', (req, res) => {
     res.sendFile(path.join(__dirname, 'app/view/restaurantDetail.html'));
 });
+
+
+
+
+app.get('/api/basket', listBasket);
+app.post('/api/basket', createBasketItem);
 
 
 

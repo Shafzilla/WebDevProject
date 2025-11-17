@@ -1,5 +1,5 @@
-const { getAllRestaurants, getDishesByRestaurantId, getBasket, addToBasket } = require('../model/restaurant');
-//const { getBasket, addToBasket } = require('../model/basketModel');
+const { getAllRestaurants, getDishesByRestaurantId } = require('../model/restaurant');
+const { getBasket, addToBasket } = require('../../model/basketModel');
 
 
 // ---------------- Restaurants ----------------

@@ -1,33 +1,5 @@
 const pool = require('../config/database');
 
-
-
-// ---------------- Restaurants ----------------
-
-const getAllRestaurants = async() => {
-    const result = await pool.query('SELECT id, name, image_url, cuisine_type, rating, address FROM restaurants ORDER BY id');
-    return result.rows;
-};
-
-
-const getDishesByRestaurantId = async(restaurantId) => {
-
-    const result = await pool.query(
-        'SELECT id, name, description, price FROM dishes WHERE restaurant_id = $1 ORDER BY price desc', [restaurantId]
-    );
-    return result.rows;
-};
-
-const deleteRestaurant = async(restaurantId) => {
-
-}
-
-
-
-
-
-// ---------------- Basket ----------------
-
 const getBasket = async (userId) => {
     const query = `
         SELECT 
@@ -51,8 +23,6 @@ const getBasket = async (userId) => {
 };
 
 
-
-
 const addToBasket = async (userId, dishId, quantity) => {
     const query = `
         INSERT INTO basket (user_id, dish_id, quantity)
@@ -64,10 +34,7 @@ const addToBasket = async (userId, dishId, quantity) => {
 };
 
 
-
 module.exports = {
-    getAllRestaurants,
-    getDishesByRestaurantId,
     getBasket,
     addToBasket
 };

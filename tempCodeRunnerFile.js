@@ -1,0 +1,1 @@
+const { listRestaurants, listDishes} = require('./app/controller/api');
