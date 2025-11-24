@@ -130,6 +130,23 @@ const authenticateToken = (req, res, next) => {
 
 };
 
+const getUserDetails = (req, res) => {
+
+    if (req.user) {
+
+        return res.json({
+            id: req.user.id,
+            username: req.user.username,
+
+        })
+
+    }
+
+    res.status(401).send('Not authenticated');
+
+}
+
+
 
 
 
@@ -138,5 +155,6 @@ module.exports = {
     listDishes,
     signUp,
     login,
-    authenticateToken
+    authenticateToken,
+    getUserDetails,
 };

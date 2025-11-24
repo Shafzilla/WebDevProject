@@ -99,4 +99,94 @@ function displayAddress(address, buttonElement) {
 
 }
 
+
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    const logoutButton = document.getElementById('logout-button');
+    if (logoutButton) {
+
+        logoutButton.addEventListener('click', handleLogout);
+
+
+    }
+    checkLoginStatus();
+
+});
+
+async function handleLogout() {
+
+    try {
+
+        const response = await fetch('/api/logout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+
+        });
+        if (response.status === 200) {
+
+            alert('You Logged out');
+            window.location.reload();
+
+        } else {
+
+            console.error('logout failed');
+            alert('logout failed');
+
+        }
+
+
+    }
+    catch (error) {
+
+        console.error('network error', error);
+        alert('network error')
+
+    }
+
+
+
+}
+
+async function checkLoginStatus() {
+
+    const greetingElement = document.getElementById('user-greeting');
+    const logoutButton = document.getElementById('logout-button');
+
+    const res = await fetch('/api/user');
+
+    if (res.status === 200) {
+
+        const userData = await res.json();
+
+        greetingElement.innerHTML = `
+            <p class="h4 fw-bold text-success">
+            Hello, ${userData.username}!
+            </p>
+        
+        `;
+
+        logoutButton.style.display = 'inline-block';
+    }
+    else {
+
+        greetingElement.innerHTML = `
+            <p class="h4 fw-bold text-danger">
+                <a href="/login">Log In</a>
+            </p>
+        
+        `;
+
+        logoutButton.style.display = 'none';
+
+    }
+
+}
+
+
+
+
 fetchRestaurants();
+checkLoginStatus();

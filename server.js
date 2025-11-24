@@ -1,7 +1,7 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const path = require('path');
-const { listRestaurants, listDishes, signUp, login, authenticateToken} = require('./app/controller/api');
+const { listRestaurants, listDishes, signUp, login, authenticateToken, getUserDetails} = require('./app/controller/api');
 
 const app = express();
 const PORT = 5000;
@@ -58,6 +58,16 @@ app.get('/login', (req, res) => {
 })
 
 app.post('/api/login', login);
+
+app.get('/api/user', authenticateToken, getUserDetails);
+
+app.post('/api/logout', (req, res) => {
+
+    res.clearCookie('token');
+
+    res.status(200).json({message:'logged out'});
+
+});
 
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
