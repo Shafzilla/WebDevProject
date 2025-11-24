@@ -1,40 +1,49 @@
 const express = require('express');
-
+const cookieParser = require('cookie-parser');
 const path = require('path');
-const { listRestaurants, listDishes, signUp, login} = require('./app/controller/api');
+const { listRestaurants, listDishes, signUp, login, authenticateToken} = require('./app/controller/api');
 
 const app = express();
 const PORT = 5000;
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.use(express.static(path.join(__dirname, 'app/view')));
 
 
 app.get('/', (req, res) => {
-    res.redirect('/index');
+
+    if (req.cookies.token) {
+
+        res.redirect('/inedx')
+    }
+    else {
+
+        res.redirect('/login')
+    }
 });
 
 
-app.get('/api/restaurants', listRestaurants);
+app.get('/api/restaurants', authenticateToken, listRestaurants);
 
 
-app.get('/api/restaurants/:id/dishes', listDishes);
+app.get('/api/restaurants/:id/dishes', authenticateToken, listDishes);
 
 
 
 app.use('/assets', express.static(path.join(__dirname, 'app/view')));
 
-app.get('/restaurants/:id/dishes', (req, res) => {
+app.get('/restaurants/:id/dishes', authenticateToken, (req, res) => {
     res.sendFile(path.join(__dirname, 'app/view/restaurantDetail.html'));
 });
 
 
-app.get('/restaurants', (req, res) => {
+app.get('/restaurants', authenticateToken, (req, res) => {
     res.sendFile(path.join(__dirname, 'app/view/restaurants.html'));
 });
 
-app.get('/detail', (req, res) => {
+app.get('/detail', authenticateToken, (req, res) => {
     res.sendFile(path.join(__dirname, 'app/view/restaurantDetail.html'));
 });
 

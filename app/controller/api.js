@@ -1,7 +1,9 @@
 const { getAllRestaurants, getDishesByRestaurantId } = require('../model/restaurant');
 const { createUser, getUserByUsername} = require('../model/users');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
+const JWT_SECRET = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30';
 
 const listRestaurants = async(req, res) => {
     try {
@@ -71,6 +73,22 @@ async function login(req, res) {
 
     // window.location.href = "/";
 
+    const payload = {
+
+        id: user.id,
+        username: user.username
+
+    }
+
+    const token = jwt.sign(payload, JWT_SECRET, {expiresIn: '1h'});
+
+    res.cookie('token', token, {
+
+        httpOnly: true,
+        secure: process.env.NODE_ENV !== 'production',
+        maxAge: 3600000
+    });
+
 
 
     return res.status(200).json({
@@ -83,9 +101,42 @@ async function login(req, res) {
 
 }
 
+const authenticateToken = (req, res, next) => {
+
+    const token = req.cookies.token;
+
+    if (!token) {
+
+        return res.status(401).send('No token provided');
+
+    }
+
+    try {
+
+        const decoded = jwt.verify(token, JWT_SECRET);
+
+        req.user = decoded;
+        next();
+
+    }
+    catch (err) {
+
+        console.error("JWT veritifaction error", err);
+
+        res.clearCookie('token');
+        return res.status(403).send('invalid token');
+
+    }
+
+};
+
+
+
+
 module.exports = {
     listRestaurants,
     listDishes,
     signUp,
-    login
+    login,
+    authenticateToken
 };
