@@ -40,6 +40,7 @@ CREATE TABLE dishes (
     id SERIAL PRIMARY KEY,
     restaurant_id INTEGER REFERENCES restaurants(id) ON DELETE CASCADE,
     name VARCHAR(100) NOT NULL,
+    dish_url TEXT,
     description TEXT,
     price DECIMAL(6,2),
     available BOOLEAN DEFAULT TRUE,
@@ -59,6 +60,22 @@ CREATE TABLE orders (
     status VARCHAR(20), -- e.g. pending, delivered, cancelled
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+
+
+-- ===========================================
+-- basket
+-- Each basket belongs to a user 
+-- If a user is deleted, their basket is deleted automatically
+-- ===========================================
+CREATE TABLE basket (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    dish_id INTEGER REFERENCES dishes(id) ON DELETE CASCADE,
+    quantity INTEGER DEFAULT 1,
+    UNIQUE(user_id, dish_id)
+);
+
 
 
 INSERT INTO restaurants ("name", image_url, cuisine_type,rating,address,latitude,longitude,created_at) VALUES
@@ -82,3 +99,11 @@ INSERT INTO dishes (restaurant_id,"name",description,price,available,created_at)
     (1,'Veggie Pizza',NULL,10.99,true,'2025-11-03 09:20:07.325451'),
     (2,'Classic Burger',NULL,9.50,true,'2025-11-03 09:20:07.325451'),
     (2,'Cheese Fries',NULL,4.25,true,'2025-11-03 09:20:07.325451');
+
+
+INSERT INTO users (username, email, password_hash) VALUES
+    ('hanna', 'hana@gmail.com', 'qw');
+  
+
+INSERT INTO basket (user_id, dish_id, quantity) VALUES
+    (1,1,1);

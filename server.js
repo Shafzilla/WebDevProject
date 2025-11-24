@@ -1,13 +1,19 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const path = require('path');
-const { listRestaurants, listDishes, signUp, login, authenticateToken, getUserDetails} = require('./app/controller/api');
+
+const { listRestaurants, listDishes, listBasket, createBasketItem, removeBasketItem, changeBasketQuantity, signUp, login, authenticateToken, getUserDetails} = require('./app/controller/api');
+
 
 const app = express();
 const PORT = 5000;
 
 app.use(express.json());
 app.use(cookieParser());
+
+app.use(express.json());
+//app.use(express.urlencoded({ extended: true }));
+
 
 app.use(express.static(path.join(__dirname, 'app/view')));
 
@@ -68,6 +74,18 @@ app.post('/api/logout', (req, res) => {
     res.status(200).json({message:'logged out'});
 
 });
+
+
+//Basket html page
+app.get('/basket', (req, res) => {
+    res.sendFile(path.join(__dirname, 'app/view/basket.html'));
+});
+
+
+app.get('/api/basket', listBasket);
+app.post('/api/basket', createBasketItem);
+app.delete("/api/basket/:id", removeBasketItem);
+app.patch("/api/basket/:dishId", changeBasketQuantity);
 
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

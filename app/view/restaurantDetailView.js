@@ -9,17 +9,10 @@ async function fetchDishesByRestaurantId(restaurantId) {
         const noDishesText = document.createElement('p');
         noDishesText.innerHTML = `
                     <p class="container p-5">...No dishes found</p>
-
-
-
                 `
         place.appendChild(noDishesText);
-
-
     }
     else {
-
-
         const list = document.getElementById('dish-list');
         data.forEach(r => {
             const colDiv = document.createElement('div');
@@ -38,6 +31,12 @@ async function fetchDishesByRestaurantId(restaurantId) {
                                      <br>
                                     <span class="text-primary fw-light">${r.description}</span>
                                     <p>$${r.price}</p>
+
+                                    <button 
+                                        class="btn btn-sm btn-success mt-2"
+                                        onclick="addToBasket(${r.id})">
+                                        Add to Basket
+                                    </button>
                                 </span>
                             </div>
                         </div>
@@ -66,3 +65,34 @@ function getRestaurantId() {
 
 restaurantId = getRestaurantId()
 fetchDishesByRestaurantId(restaurantId);
+
+
+
+//Add to basket function
+async function addToBasket(dishId) {
+
+    const response = await fetch("/api/basket", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            user_id: 1, //for testing now, replace with actual user id later
+            dish_id: dishId,
+            quantity: 1
+        })
+    });
+
+    if (response.ok) {
+        alert("Dish added to basket!");
+    } 
+    else {
+        try {
+            const errorData = await response.json();
+            console.error("Error response:", errorData);
+            alert("Failed to add dish: " + (errorData.message || errorData.error || response.statusText));
+        } 
+        catch (e) {
+            console.error("Error parsing response:", e);
+            alert("Failed to add dish: " + response.statusText);
+        }
+    }
+}
