@@ -38,7 +38,7 @@ const getBasket = async (userId) => {
         JOIN restaurants ON dishes.restaurant_id = restaurants.id
         WHERE basket.user_id = $1 
     `;
-    const result = await pool.query(query, [1]); // change to [userId] after login is done
+    const result = await pool.query(query, [userId]); // change to [userId] after login is done
     return result.rows;
 };
 

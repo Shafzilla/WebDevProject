@@ -1,5 +1,7 @@
 async function fetchDishesByRestaurantId(restaurantId) {
 
+    const isLoggedIn = await isUserLoggedIn();
+
     const res = await fetch(`/api/restaurants/${restaurantId}/dishes`);
     const data = await res.json();
 
@@ -23,6 +25,20 @@ async function fetchDishesByRestaurantId(restaurantId) {
             li.className = 'menu-list-item p-4 shadow-sm';
 
 
+            const basketButtonHTML = isLoggedIn
+                ?
+                `<button 
+                  class="btn btn-sm btn-success mt-2"
+                  onclick="addToBasket(${r.id})">
+                  Add to Basket
+              </button>
+                
+            
+                `
+                : `<a href="/login" class="btn btn-sm btn-warning mt-2">
+                  Log In to Order
+              </a>`;
+
             li.innerHTML = `
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="d-flex align-items-center">
@@ -32,11 +48,7 @@ async function fetchDishesByRestaurantId(restaurantId) {
                                     <span class="text-primary fw-light">${r.description}</span>
                                     <p>$${r.price}</p>
 
-                                    <button 
-                                        class="btn btn-sm btn-success mt-2"
-                                        onclick="addToBasket(${r.id})">
-                                        Add to Basket
-                                    </button>
+                                    ${basketButtonHTML}
                                 </span>
                             </div>
                         </div>
@@ -94,5 +106,16 @@ async function addToBasket(dishId) {
             console.error("Error parsing response:", e);
             alert("Failed to add dish: " + response.statusText);
         }
+    }
+}
+
+async function isUserLoggedIn() {
+    try {
+        const res = await fetch('/api/user');
+        // If the server returns 200, they are logged in.
+        return res.status === 200;
+    } catch (e) {
+        // Network error or other failure implies logged out.
+        return false;
     }
 }

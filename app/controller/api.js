@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const JWT_SECRET = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30';
-
+const jwtExpirySeconds = 300
 
 
 // ---------------- Restaurants ----------------
@@ -86,13 +86,13 @@ async function login(req, res) {
 
     }
 
-    const token = jwt.sign(payload, JWT_SECRET, {expiresIn: '1h'});
+    const token = jwt.sign(payload, JWT_SECRET, {expiresIn: jwtExpirySeconds, algorithm: 'HS256'});
 
     res.cookie('token', token, {
 
         httpOnly: true,
         secure: process.env.NODE_ENV !== 'production',
-        maxAge: 3600000
+        maxAge: jwtExpirySeconds * 1000
     });
 
 
@@ -156,7 +156,9 @@ const getUserDetails = (req, res) => {
 
 const listBasket = async (req, res) => {
     try {
-        const userId = 1; // TEMPORARY until login works
+        const userId = req.user.id;
+
+
         const basket = await getBasket(userId);
         res.json(basket);
     } 
@@ -170,7 +172,7 @@ const listBasket = async (req, res) => {
 const createBasketItem = async (req, res) => {
     try {
         const { dish_id } = req.body;
-        const userId = 1; // temp until login created
+        const userId = req.user.id;
 
         const item = await addToBasket(userId, dish_id);
 
@@ -186,10 +188,12 @@ const createBasketItem = async (req, res) => {
 
 
 
+
+
 const removeBasketItem = async (req, res) => {
   try {
     const basketId = req.params.id;
-    const userId = 1; // TEMP for now
+    const userId = req.user.id; // TEMP for now
 
     const success = await deleteBasketItem(basketId, userId);
 
@@ -210,7 +214,8 @@ const removeBasketItem = async (req, res) => {
 
 const changeBasketQuantity = async (req, res) => {
     try {
-        const userId = 1; // TEMPORARY until login works
+        const userId = req.user.id;
+
         const dishId = parseInt(req.params.dishId);
         //{ change: 1 } or { change: -1 }
         const { change } = req.body; 

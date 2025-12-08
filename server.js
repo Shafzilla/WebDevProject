@@ -31,16 +31,16 @@ app.get('/', (req, res) => {
 });
 
 
-app.get('/api/restaurants', authenticateToken, listRestaurants);
+app.get('/api/restaurants', listRestaurants);
 
 
-app.get('/api/restaurants/:id/dishes', authenticateToken, listDishes);
+app.get('/api/restaurants/:id/dishes',  listDishes);
 
 
 
 app.use('/assets', express.static(path.join(__dirname, 'app/view')));
 
-app.get('/restaurants/:id/dishes', authenticateToken, (req, res) => {
+app.get('/restaurants/:id/dishes',  (req, res) => {
     res.sendFile(path.join(__dirname, 'app/view/restaurantDetail.html'));
 });
 
@@ -77,15 +77,15 @@ app.post('/api/logout', (req, res) => {
 
 
 //Basket html page
-app.get('/basket', (req, res) => {
+app.get('/basket', authenticateToken, (req, res) => {
     res.sendFile(path.join(__dirname, 'app/view/basket.html'));
 });
 
 
-app.get('/api/basket', listBasket);
-app.post('/api/basket', createBasketItem);
-app.delete("/api/basket/:id", removeBasketItem);
-app.patch("/api/basket/:dishId", changeBasketQuantity);
+app.get('/api/basket', authenticateToken, listBasket);
+app.post('/api/basket', authenticateToken, createBasketItem);
+app.delete("/api/basket/:id", authenticateToken, removeBasketItem);
+app.patch("/api/basket/:dishId", authenticateToken, changeBasketQuantity);
 
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
