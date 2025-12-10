@@ -185,6 +185,34 @@ async function checkLoginStatus() {
 
 }
 
+function filterRestaurants() {
+
+    // parsing the index page into different variables
+    const input = document.getElementById('searchInput');
+    const filter = input.value.toLowerCase();
+
+    const ul = document.getElementById('restaurant-list');
+
+    const colDivs = ul.getElementsByClassName('col');
+
+
+    for (let i = 0; i < colDivs.length; i++) {
+
+        const listItem = colDivs[i].querySelector('.restaurant-item');
+
+        if (listItem) {
+            const restaurantNameElement = listItem.querySelector('h3');
+            const nameText = restaurantNameElement ? restaurantNameElement.textContent.toLowerCase() : '';
+
+            if (nameText.includes(filter)) {
+                colDivs[i].style.display = "";
+            } else {
+                colDivs[i].style.display = "none";
+            }
+        }
+    }
+}
+
 
 
 

@@ -39,21 +39,24 @@ async function fetchDishesByRestaurantId(restaurantId) {
                   Log In to Order
               </a>`;
 
-            li.innerHTML = `
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="d-flex align-items-center">
-                                <h3>${r.name}</h3>
-                                <span class="ms-3 me-4 text-end">
-                                     <br>
-                                    <span class="text-primary fw-light">${r.description}</span>
-                                    <p>$${r.price}</p>
 
-                                    ${basketButtonHTML}
-                                </span>
-                            </div>
+            li.innerHTML = `
+                <div class="dish-card-content">
+                    
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div class="dish-details flex-grow-1 me-3">
+                            <h3>${r.name}</h3>
+                            <span class="description-text">${r.description}</span>
                         </div>
-                        <p class="text-secondary small mt-2 fst-italic"></p>
-                    `;
+                        
+                        <div class="price-and-button text-end">
+                            <span class="dish-price">$${r.price}</span>
+                            ${basketButtonHTML}
+                        </div>
+                    </div>
+                    
+                </div>
+            `;
 
 
             colDiv.appendChild(li);
@@ -75,8 +78,6 @@ function getRestaurantId() {
 
 }
 
-restaurantId = getRestaurantId()
-fetchDishesByRestaurantId(restaurantId);
 
 
 
@@ -119,3 +120,38 @@ async function isUserLoggedIn() {
         return false;
     }
 }
+
+function renderRestaurantHeader(restaurant) {
+    const headerContainer = document.getElementById('restaurant-info');
+    headerContainer.innerHTML = `
+        <img src="${restaurant.image_url}" 
+             alt="${restaurant.name}" 
+             class="img-fluid mb-4" 
+             style="max-height: 300px; width: 100%; object-fit: cover; border-radius: 8px;">
+        
+        <h1 class="display-4 fw-bold mb-0">${restaurant.name}</h1>
+        `;
+}
+
+async function fetchRestaurantDetails(restaurantId) {
+    try {
+        const res = await fetch('/api/restaurants/');
+        if (!res.ok) {
+            throw new Error('Failed to fetch restaurant details');
+        }
+        const data = await res.json();
+
+        const dataParsed = data[restaurantId - 1];
+
+        renderRestaurantHeader(dataParsed);
+    } catch (error) {
+        console.error("Error fetching restaurant details:", error);
+        document.getElementById('restaurant-info').innerHTML =
+            '<h2 class="text-danger">Could not load restaurant information.</h2>';
+    }
+}
+
+restaurantId = getRestaurantId()
+fetchRestaurantDetails(restaurantId);
+fetchDishesByRestaurantId(restaurantId);
+

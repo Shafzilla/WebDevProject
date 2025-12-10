@@ -11,6 +11,7 @@
     </style>
 </head>
 <body>
+
     <nav class="navbar bg-body-tertiary">
         <div class="container-fluid">
             <a class="navbar-brand" href="/">
@@ -19,11 +20,24 @@
             </a>
         </div>
     </nav>
-    <div class="container py-4">
-        <h1 class="text-center mb-4">Dishes</h1>
-        <ul id="dish-list" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 list-unstyled"></ul>
 
+    <nav class="navbar bg-body-tertiary">
+    </nav>
+
+    <div id="restaurant-header" class="container text-center py-5 mb-4 bg-white shadow-sm" style="border-radius: 12px;">
+        <div id="restaurant-info">
+            <h2 class="text-secondary">Loading Restaurant Details...</h2>
+        </div>
     </div>
+
+    <div class="container py-4">
+        <h2 class="text-center mb-4 dishes-title">Menu Dishes</h2>
+
+        <ul id="dish-list" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 list-unstyled"></ul>
+    </div>
+
+
+
     <script src="/assets/restaurantDetailView.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

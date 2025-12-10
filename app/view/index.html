@@ -43,13 +43,14 @@
             </a>
 
             <!-- Search bar, always visible -->
+
             <form class="d-flex search-container" role="search">
                 <div class="form-control search-bar" type="search" placeholder="Search" aria-label="Search">
                     <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Search Uber Eats">
+                    <input type="text" id="searchInput" placeholder="Search Uber Eats" onkeyup="filterRestaurants()">
                 </div>
-                <button class="search-button">Search</button>
-            </form> 
+                <button class="search-button" type="button" onclick="filterRestaurants()">Search</button>
+            </form>
 
 
             <!-- Shopping cart logo always visible-->

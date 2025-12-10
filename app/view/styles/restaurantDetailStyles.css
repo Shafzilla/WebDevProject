@@ -19,3 +19,97 @@
     padding: 10px;
 }
 
+body {
+    background-color: #f7f9fc;
+    color: #333;
+}
+
+.navbar {
+    background-color: #ffffff !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.container h1 {
+    font-family: 'Georgia', serif;
+    font-weight: 700;
+    color: #4a4a4a;
+    margin-bottom: 3rem !important;
+    border-bottom: 3px solid #ff7f50;
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+.menu-list-item {
+    border: none;
+    border-radius: 12px;
+    background-color: #ffffff;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    padding: 20px !important;
+    height: 100%;
+}
+
+.menu-list-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.menu-list-item h3 {
+    font-size: 1.5rem;
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 0;
+}
+
+.menu-list-item .description-text {
+    font-style: italic;
+    color: #6c757d;
+    display: block;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    line-height: 1.4;
+    font-size: 0.95rem;
+}
+
+.menu-list-item .dish-price {
+    font-size: 1.6rem;
+    color: #ff7f50;
+    font-weight: 700;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.menu-list-item .btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+    transition: background-color 0.15s;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.menu-list-item .btn-success:hover {
+    background-color: #218838;
+}
+
+.menu-list-item .btn-warning {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #333;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.menu-list-item .btn-warning:hover {
+    background-color: #e0a800;
+}
+
+.no-dishes-message {
+    font-size: 1.25rem;
+    color: #888;
+    text-align: center;
+    padding: 50px;
+    border: 1px dashed #ccc;
+    border-radius: 8px;
+    margin-top: 30px;
+}
+
