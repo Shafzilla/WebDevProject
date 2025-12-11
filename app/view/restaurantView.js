@@ -110,6 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     }
+    updateBasketLink();
     checkLoginStatus();
 
 });
@@ -169,6 +170,7 @@ async function checkLoginStatus() {
         `;
 
         logoutButton.style.display = 'inline-block';
+        return true;
     }
     else {
 
@@ -180,10 +182,12 @@ async function checkLoginStatus() {
         `;
 
         logoutButton.style.display = 'none';
+        return false;
 
     }
 
 }
+
 
 function filterRestaurants() {
 
@@ -210,6 +214,20 @@ function filterRestaurants() {
                 colDivs[i].style.display = "none";
             }
         }
+    }
+}
+
+
+async function updateBasketLink() {
+
+    const basketLink = document.querySelector('.shopping-cart a');
+
+    const isLoggedIn = await checkLoginStatus();
+
+    if (isLoggedIn) {
+        basketLink.href = 'basket.html';
+    } else {
+        basketLink.href = 'login.html';
     }
 }
 
