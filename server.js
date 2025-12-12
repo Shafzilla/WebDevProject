@@ -2,7 +2,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const path = require('path');
 
-const { listRestaurants, listDishes, listBasket, createBasketItem, removeBasketItem, changeBasketQuantity, signUp, login, authenticateToken, getUserDetails} = require('./app/controller/api');
+const { listRestaurants, listDishes, listDishesByFoodType, listBasket, createBasketItem, removeBasketItem, changeBasketQuantity, signUp, login, authenticateToken, getUserDetails} = require('./app/controller/api');
 
 
 const app = express();
@@ -22,7 +22,7 @@ app.get('/', (req, res) => {
 
     if (req.cookies.token) {
 
-        res.redirect('/inedx')
+        res.redirect('/index.html')
     }
     else {
 
@@ -35,6 +35,7 @@ app.get('/api/restaurants', listRestaurants);
 
 
 app.get('/api/restaurants/:id/dishes',  listDishes);
+app.get('/api/dishes/filter/:foodType', listDishesByFoodType);
 
 
 

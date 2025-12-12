@@ -10,9 +10,6 @@ async function fetchRestaurants() {
         const colDiv = document.createElement('div');
         colDiv.className = 'col';
 
-
-
-
         const li = document.createElement('li');
         li.className = 'restaurant-item p-4 shadow-sm';
 
@@ -33,8 +30,6 @@ async function fetchRestaurants() {
             event.stopPropagation();
             displayAddress(r.address, addressButton);
         });
-
-
 
         li.innerHTML = `
                     <img src="${r.image_url}" alt="${r.name}" class="restaurant-img mb-2">
@@ -71,6 +66,7 @@ async function fetchRestaurants() {
     });
 }
 
+
 function displayAddress(address, buttonElement) {
 
     const addressID = `address-${buttonElement.dataset.restaurantId}`;
@@ -99,94 +95,6 @@ function displayAddress(address, buttonElement) {
 
 }
 
-
-
-document.addEventListener('DOMContentLoaded', () => {
-
-    const logoutButton = document.getElementById('logout-button');
-    if (logoutButton) {
-
-        logoutButton.addEventListener('click', handleLogout);
-
-
-    }
-    updateBasketLink();
-    checkLoginStatus();
-
-});
-
-async function handleLogout() {
-
-    try {
-
-        const response = await fetch('/api/logout', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-
-        });
-        if (response.status === 200) {
-
-            alert('You Logged out');
-            window.location.reload();
-
-        } else {
-
-            console.error('logout failed');
-            alert('logout failed');
-
-        }
-
-
-    }
-    catch (error) {
-
-        console.error('network error', error);
-        alert('network error')
-
-    }
-
-
-
-}
-
-async function checkLoginStatus() {
-
-    const greetingElement = document.getElementById('user-greeting');
-    const logoutButton = document.getElementById('logout-button');
-
-    const res = await fetch('/api/user');
-
-    if (res.status === 200) {
-
-        const userData = await res.json();
-
-        greetingElement.innerHTML = `
-            <p class="h4 fw-bold text-success">
-            Hello, ${userData.username}!
-            </p>
-        
-        `;
-
-        logoutButton.style.display = 'inline-block';
-        return true;
-    }
-    else {
-
-        greetingElement.innerHTML = `
-            <p class="h4 fw-bold text-danger">
-                <a href="/login">Log In</a>
-            </p>
-        
-        `;
-
-        logoutButton.style.display = 'none';
-        return false;
-
-    }
-
-}
 
 
 function filterRestaurants() {
@@ -218,21 +126,143 @@ function filterRestaurants() {
 }
 
 
-async function updateBasketLink() {
 
-    const basketLink = document.querySelector('.shopping-cart a');
+// Food type filter functionality
+let currentFilter = null;
 
-    const isLoggedIn = await checkLoginStatus();
-
-    if (isLoggedIn) {
-        basketLink.href = 'basket.html';
-    } else {
-        basketLink.href = 'login.html';
+async function filterByFoodType(foodType) {
+    // Toggle behavior: if the same filter is clicked again, clear it
+    if (currentFilter === foodType) {
+        clearFilter();
+        return;
+    }
+    
+    currentFilter = foodType;
+    
+    // Update UI to show we're filtering
+    document.getElementById('page-title').textContent = `Dishes - ${foodType.charAt(0).toUpperCase() + foodType.slice(1)}`;
+    
+    // Highlight the selected filter
+    const cuisineButtons = document.querySelectorAll('.cuisine');
+    cuisineButtons.forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.getAttribute('onclick')?.includes(foodType)) {
+            btn.classList.add('active');
+        }
+    });
+    
+    try {
+        const res = await fetch(`/api/dishes/filter/${foodType}`);
+        const dishes = await res.json();
+        
+        const list = document.getElementById('restaurant-list');
+        // Clear existing content
+        list.innerHTML = ''; 
+        
+        if (dishes.length === 0) {
+            const colDiv = document.createElement('div');
+            colDiv.className = 'col-12';
+            colDiv.innerHTML = '<p class="text-center p-5">No dishes found for this filter.</p>';
+            list.appendChild(colDiv);
+        } 
+        else {
+            // Check login status once before the loop
+            const isLoggedIn = await isUserLoggedIn();
+            
+            dishes.forEach(dish => {
+                const colDiv = document.createElement('div');
+                colDiv.className = 'col';
+                
+                const li = document.createElement('li');
+                li.className = 'restaurant-item p-4 shadow-sm';
+                li.style.cursor = 'pointer';
+                
+                const basketButtonHTML = isLoggedIn
+                    ? `<button 
+                          class="btn btn-sm btn-success mt-2"
+                          onclick="event.stopPropagation(); addToBasketFromFilter(${dish.id})">
+                          Add to Basket
+                      </button>`
+                    : `<a href="/login" class="btn btn-sm btn-warning mt-2" onclick="event.stopPropagation();">
+                          Log In to Order
+                      </a>`;
+                
+                li.innerHTML = `
+                    <div class="d-flex flex-column">
+                        ${dish.image_url ? `<img src="${dish.image_url}" alt="${dish.name}" class="dish-img mb-3" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px;">` : ''}
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                                <h4>${dish.name}</h4>
+                                <p class="text-muted mb-1">${dish.restaurant_name}</p>
+                                ${dish.description ? `<p class="text-secondary small">${dish.description}</p>` : ''}
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-primary fw-bold">€${dish.price}</span>
+                            ${basketButtonHTML}
+                        </div>
+                    </div>
+                `;
+                
+                li.addEventListener('click', () => {
+                    window.location.href = `/restaurants/${dish.restaurant_id}/dishes`;
+                });
+                
+                colDiv.appendChild(li);
+                list.appendChild(colDiv);
+            });
+        }
+    } catch (error) {
+        console.error('Error fetching filtered dishes:', error);
+        const list = document.getElementById('restaurant-list');
+        list.innerHTML = '<div class="col-12"><p class="text-center text-danger p-5">Error loading dishes. Please try again.</p></div>';
     }
 }
 
+function clearFilter() {
+    currentFilter = null;
+    document.getElementById('page-title').textContent = 'Restaurants';
+    
+    // Remove active class from all cuisine buttons
+    const cuisineButtons = document.querySelectorAll('.cuisine');
+    cuisineButtons.forEach(btn => btn.classList.remove('active'));
+    
+    // Reload restaurants
+    const list = document.getElementById('restaurant-list');
+    list.innerHTML = '';
+    fetchRestaurants();
+}
 
+async function isUserLoggedIn() {
+    try {
+        const res = await fetch('/api/user');
+        return res.status === 200;
+    } catch (e) {
+        return false;
+    }
+}
 
+async function addToBasketFromFilter(dishId) {
+    try {
+        const response = await fetch("/api/basket", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: 'include',
+            body: JSON.stringify({
+                dish_id: dishId
+            })
+        });
+
+        if (response.ok) {
+            alert("Dish added to basket!");
+        } else {
+            const errorData = await response.json();
+            alert("Failed to add dish: " + (errorData.message || errorData.error || response.statusText));
+        }
+    } catch (error) {
+        console.error("Error adding to basket:", error);
+        alert("Failed to add dish. Please try again.");
+    }
+}
 
 fetchRestaurants();
-checkLoginStatus();

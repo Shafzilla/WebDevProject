@@ -1,5 +1,5 @@
 
-const { getAllRestaurants, getDishesByRestaurantId, getBasket, addToBasket, deleteBasketItem, updateBasketQuantity} = require('../model/restaurant');
+const { getAllRestaurants, getDishesByRestaurantId, getDishesByFoodType, getBasket, addToBasket, deleteBasketItem, updateBasketQuantity} = require('../model/restaurant');
 const { createUser, getUserByUsername} = require('../model/users');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -29,6 +29,17 @@ const listDishes = async(req, res) => {
     } catch (err) {
         console.error(err);
         res.status(500).send('Server error fetching dishes');
+    }
+};
+
+const listDishesByFoodType = async(req, res) => {
+    const foodType = req.params.foodType;
+    try {
+        const dishes = await getDishesByFoodType(foodType);
+        res.json(dishes);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server error fetching dishes by food type');
     }
 };
 
@@ -91,8 +102,9 @@ async function login(req, res) {
     res.cookie('token', token, {
 
         httpOnly: true,
-        secure: process.env.NODE_ENV !== 'production',
-        maxAge: jwtExpirySeconds * 1000
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: jwtExpirySeconds * 1000,
+        sameSite: 'lax'
     });
 
 
@@ -158,13 +170,20 @@ const listBasket = async (req, res) => {
     try {
         const userId = req.user.id;
 
+        if (!userId) {
+            return res.status(401).json({ error: "User not authenticated" });
+        }
 
         const basket = await getBasket(userId);
         res.json(basket);
     } 
     catch (err) {
-        console.error(err);
-        res.status(500).send("Error fetching basket");
+        console.error("Error in listBasket:", err);
+        console.error("Error stack:", err.stack);
+        res.status(500).json({ 
+            error: "Error fetching basket",
+            message: err.message 
+        });
     }
 };
 
@@ -247,6 +266,7 @@ const changeBasketQuantity = async (req, res) => {
 module.exports = {
     listRestaurants,
     listDishes,
+    listDishesByFoodType,
     login,
     authenticateToken,
     getUserDetails,

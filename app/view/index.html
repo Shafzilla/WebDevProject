@@ -21,7 +21,7 @@
 <body>
 
     <!--Responsive top navigation bar that turns to a burger button on smaller screens-->
-    <nav class="navbar sticky-top navbar-expand-lg ">
+    <nav class="navbar navbar-expand-lg ">
         <div class="container-fluid banner">
 
             <!-- Toggle button only controls the collapsible menu -->
@@ -42,41 +42,43 @@
                <H1>Lets Eat</H1>
             </a>
 
-            <!-- Search bar, always visible -->
-
+            <!-- Search bar - moves below navbar on small screens -->
             <form class="d-flex search-container" role="search">
                 <div class="form-control search-bar" type="search" placeholder="Search" aria-label="Search">
                     <i class="fas fa-search"></i>
-                    <input type="text" id="searchInput" placeholder="Search Uber Eats" onkeyup="filterRestaurants()">
+                    <input type="text" id="searchInput" placeholder="Search for restaurants" onkeyup="filterRestaurants()">
                 </div>
                 <button class="search-button" type="button" onclick="filterRestaurants()">Search</button>
             </form>
 
 
-            <!-- Shopping cart logo always visible-->
-
-            <div class="shopping-cart" >
-                    <a href="basket.html"> 
-
+            <!-- Shopping cart logo - visible on large screens, hidden on small -->
+            <div class="shopping-cart d-lg-block d-none" >
+                    <a href="/basket"> 
                         <i class="fas fa-shopping-cart"></i>
                     </a>
                 </div>
-
             <div class="collapse navbar-collapse " id="unifiedNavbarContent">                
-                <div class="auth-links d-lg-flex d-none">
-                    <a href="login.html">login</a>
-                    <a href="signup.html" class="signup-decor" >signup</a>
+                <div class="auth-links" id="navbar-auth-links">
+                    <!-- Shopping cart - visible in menu on small screens -->
+                    <div class="shopping-cart-menu d-lg-none">
+                        <a href="/basket"> 
+                            <i class="fas fa-shopping-cart"></i> Cart
+                        </a>
+                    </div>
+                    <a href="/login" id="navbar-login-link">login</a>
+                    <a href="/signup" class="signup-decor" id="navbar-signup-link">signup</a>
+                    
+                    <div id="user-info" class="greeting">
+                        <div id="user-greeting" class="greeting"></div>
+                        <button id="logout-button" class="btn btn-danger btn-sm" style="display: none">Log Out</button>
+                    </div>
                 </div>
             </div>
         </div>
     </nav>
 
-    <div id="user-info" class="p-3">
-        <div id="user-greeting" class="p-3"></div>
-
-        <button id="logout-button" class="btn btn-danger btn-sm" style="display: none">Log Out</button>
-
-    </div>
+    
 
 
 
@@ -84,26 +86,27 @@
         <button class="scroll-btn left-btn">&#8592;</button>
 
         <div class="cuisine-list" id="cuisineList">
-            <a href="burgers.html" class="cuisine">🍔<span>Burgers</span></a>
-            <a href="pizza.html" class="cuisine">🍕<span>Pizza</span></a>
-            <a href="sushi.html" class="cuisine">🍣<span>Sushi</span></a>
-            <a href="salads.html" class="cuisine">🥗<span>Vegan</span></a>
-            <a href="tacos.html" class="cuisine">🌮<span>Tacos</span></a>
-            <a href="pasta.html" class="cuisine">🍝<span>Pasta</span></a>
-            <a href="desserts.html" class="cuisine">🧁<span>Desserts</span></a>
-            <a href="drinks.html" class="cuisine">🍹<span>Drinks</span></a>
-            <a href="halal.html" class="cuisine">🥩<span>Halal</span></a>
+            <button class="cuisine" onclick="filterByFoodType('burger')"><span class="emoji">🍔</span><span>Burgers</span></button>
+            <button class="cuisine" onclick="filterByFoodType('pizza')"><span class="emoji">🍕</span><span>Pizza</span></button>
+            <button class="cuisine" onclick="filterByFoodType('sushi')"><span class="emoji">🍣</span><span>Sushi</span></button>
+            <button class="cuisine" onclick="filterByFoodType('vegan')"><span class="emoji">🥗</span><span>Vegan</span></button>
+            <button class="cuisine" onclick="filterByFoodType('taco')"><span class="emoji">🌮</span><span>Tacos</span></button>
+            <button class="cuisine" onclick="filterByFoodType('pasta')"><span class="emoji">🍝</span><span>Pasta</span></button>
+            <button class="cuisine" onclick="filterByFoodType('dessert')"><span class="emoji">🧁</span><span>Desserts</span></button>
+            <button class="cuisine" onclick="filterByFoodType('drink')"><span class="emoji">🍹</span><span>Drinks</span></button>
+            <button class="cuisine" onclick="filterByFoodType('halal')"><span class="emoji">🥩</span><span>Halal</span></button>
         </div>
 
         <button class="scroll-btn right-btn">&#8594;</button>
     </div>
 
     <div class="container py-4">
-        <h1 class="text-center mb-4">Restaurants</h1>
+        <h1 class="text-center mb-4" id="page-title">Restaurants</h1>
         <ul id="restaurant-list" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 list-unstyled"></ul>
 
     </div>
 
+    <script src="/assets/sharedAuth.js"></script>
     <script src="restaurantView.js"></script>
     <script src="ScrollArrows.js"></script>
 

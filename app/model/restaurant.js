@@ -9,8 +9,31 @@ const getAllRestaurants = async() => {
 const getDishesByRestaurantId = async(restaurantId) => {
 
     const result = await pool.query(
-        'SELECT id, name, description, price FROM dishes WHERE restaurant_id = $1 ORDER BY price desc', [restaurantId]
+        'SELECT id, name, description, price, image_url FROM dishes WHERE restaurant_id = $1 ORDER BY price desc', [restaurantId]
     );
+    return result.rows;
+};
+
+const getDishesByFoodType = async(foodType) => {
+    const query = `
+        SELECT 
+            dishes.id,
+            dishes.name,
+            dishes.description,
+            dishes.price,
+            dishes.image_url,
+            dishes.restaurant_id,
+            restaurants.name AS restaurant_name,
+            restaurants.image_url AS restaurant_image
+        FROM dishes
+        JOIN restaurants ON dishes.restaurant_id = restaurants.id
+        WHERE LOWER(dishes.description) LIKE $1 
+           OR LOWER(dishes.name) LIKE $1
+           OR LOWER(restaurants.cuisine_type) LIKE $1
+        ORDER BY dishes.price DESC
+    `;
+    const searchTerm = `%${foodType.toLowerCase()}%`;
+    const result = await pool.query(query, [searchTerm]);
     return result.rows;
 };
 
@@ -21,30 +44,48 @@ const deleteRestaurant = async(restaurantId) => {
 // ---------------- Basket ----------------
 
 const getBasket = async (userId) => {
-    const query = `
-        SELECT 
-            basket.id AS basket_id,
-            basket.quantity,
-            
-            dishes.id AS dish_id,
-            dishes.name AS dish_name,
-            dishes.price AS dish_price,
-            dishes.dish_url AS dish_image,
+    try {
+        if (!userId) {
+            throw new Error("User ID is required");
+        }
+        
+        const query = `
+            SELECT 
+                basket.id AS basket_id,
+                basket.quantity,
+                
+                dishes.id AS dish_id,
+                dishes.name AS dish_name,
+                dishes.price AS dish_price,
+                dishes.image_url AS dish_image,
 
-            restaurants.id AS restaurant_id,
-            restaurants.name AS restaurant_name
-        FROM basket
-        JOIN dishes ON basket.dish_id = dishes.id
-        JOIN restaurants ON dishes.restaurant_id = restaurants.id
-        WHERE basket.user_id = $1 
-    `;
-    const result = await pool.query(query, [userId]); // change to [userId] after login is done
-    return result.rows;
+                restaurants.id AS restaurant_id,
+                restaurants.name AS restaurant_name
+            FROM basket
+            INNER JOIN dishes ON basket.dish_id = dishes.id
+            INNER JOIN restaurants ON dishes.restaurant_id = restaurants.id
+            WHERE basket.user_id = $1 
+            ORDER BY basket.id DESC
+        `;
+        
+        console.log("Executing getBasket query for userId:", userId);
+        const result = await pool.query(query, [userId]);
+        console.log("Basket query returned", result.rows.length, "items");
+        return result.rows;
+    } catch (error) {
+        console.error("Database error in getBasket:", error);
+        console.error("Error details:", {
+            message: error.message,
+            code: error.code,
+            detail: error.detail
+        });
+        throw error;
+    }
 };
 
 
 
-//adds to dishes to basket, increments quantity if dish already in basket
+//adds dishes to basket, increments quantity if dish already in basket
 const addToBasket = async (userId, dishId) => {
 
     const query = `
@@ -93,6 +134,7 @@ const updateBasketQuantity = async (userId, dishId, change) => {
 module.exports = {
     getAllRestaurants,
     getDishesByRestaurantId,
+    getDishesByFoodType,
     getBasket,
     addToBasket,
     deleteBasketItem,

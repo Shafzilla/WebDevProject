@@ -1,3 +1,9 @@
+
+body {
+    font-family: Arial, sans-serif;
+    padding: 0;
+}
+
 .restaurant-img {
     width: 100%;        
     height: 150px;      
@@ -10,20 +16,10 @@
 
 .restaurant-item {
     cursor: pointer;
-    /*margin-bottom: 0;*/
-    /*padding: 15px;*/
-    /*padding-top: 50px;*/
     border-radius: 10px;
-    /*width: 60%;*/
-    /*margin-left: auto;*/
-    /*margin-right: auto;*/
     color: black;
     background-color: whitesmoke;
-    /*box-shadow: 0 4px 8px rgba(0,0,0,0.1);*/
-    /*width: 100%;*/
-    /*height: 100%;*/
     font-family: JETSansDigital,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Arial,sans-serif;
-
     margin-bottom: 2px;
     transition: transform 0.2s;
 
@@ -63,33 +59,34 @@
 
 
 
-/*-------------------------------------------------------------------------------*/
+/* ------------------------ Top Banner ----------------------- */
 
-body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-}
 
-.whole-page {
-    border-radius: 10px;
-}
-
-.navbar .container-fluid {
-    max-width: 100%;       /* don’t exceed viewport width */
-    overflow-x: hidden;    /* prevent horizontal scroll */
-    padding-left: 15px;    /* Bootstrap default padding */
-    padding-right: 15px;
-    box-sizing: border-box; /* include padding in width */
+/* override bootstrap navbar to make banner sticky and remove unwanted spacing ontop caused by bootstrap 5 bug by resetting margin and padding to 0 */
+nav.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    margin: 0 !important;
+    padding-top: 0 !important;
+    max-width: 100%;       
+    overflow-x: hidden;  
+    box-sizing: border-box; 
 }
 
 
-
-
-.container {
+.banner {
+    /* internal spacing */
+    padding-top: 20px;
+    padding-inline-start: 5%;
     display: flex;
-    flex-direction: column;
-    gap: 15px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
     background-color: white;
+    width: 100%;
+    height: auto;
 }
 
 
@@ -103,15 +100,6 @@ body {
 
 
 
-.banner {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    text-align: center;
-    background-color: white;
-    width: 100%;
-}
-
 a{
     text-decoration: none;
     color: black;
@@ -120,44 +108,108 @@ a{
 .search-container {
     display: flex;
     align-items: center;
-    gap: 10px;
     flex-grow: 1; 
-    margin-right: 20px;
+    margin-left: 15%;
+    margin-right: 2%;
 }
 
 .shopping-cart {
-    margin-right: 150px;
+    margin-right: 5%;
+    margin-left: 5%;
     display: flex;
     align-items: center;
-    gap: 10px;
     flex-grow: 1; 
 }
 
+/* Shopping cart in menu for small screens */
+.shopping-cart-menu {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 10px;
+}
 
+.shopping-cart-menu a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 18px;
+}
 
+.shopping-cart-menu i {
+    font-size: 20px;
+}
 
-
-
-/* For small screens, reset padding  for search container*/
-/* matches Bootstrap lg breakpoint */
+/* For small screens - move search below navbar */
 @media (max-width: 991px) { 
-    .search-container, .shopping-cart {
-        padding-left: 0;
-        flex-direction: row; 
-        width: 100%; 
+    .banner {
+        flex-wrap: wrap;
+        padding-inline-start: 15px;
+        padding-right: 15px;
+    }
+    
+    .navbar-brand {
+        order: 1;
+    }
+    
+    .navbar-toggler {
+        order: 2;
+    }
+    
+    .search-container {
+        order: 3;
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+        margin-top: 15px;
+        padding: 0;
+        flex: 1 1 100%;
+    }
+    
+    .shopping-cart {
+        margin-right: 0;
+        margin-left: 0;
+    }
+    
+    /* Ensure navbar collapse works properly */
+    .navbar-collapse {
+        order: 4;
+        width: 100%;
+        margin-top: 10px;
+        flex: 1 1 100%;
+    }
+    
+    .auth-links {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        padding: 10px 0;
+    }
+    
+    .auth-links a {
+        padding: 8px 0;
     }
 }
 
-.search-bar, .signup-decor{
+.search-bar{
     display: flex;
     align-items: center;
     background-color: #f5f5f5;
     border-radius: 25px;
     padding: 11px 15px;
     flex-grow: 1;
-    min-width: 120px; /* ensures it doesn’t get too small */
-    flex: 1;           /* takes remaining space */
-    max-width: 500px;  /* optional limit */
+    min-width: 120px; 
+    flex: 1;           
+    max-width: 500px; 
+}
+
+.signup-decor{
+    align-items: center;
+    background-color: #f5f5f5;
+    border-radius: 25px;
+    padding: 11px 15px;
+
 }
 
 .search-bar input {
@@ -203,9 +255,19 @@ i.fas.fa-shopping-cart {
     gap: 20px; 
 }
 
+/* On large screens, keep auth links horizontal */
+@media (min-width: 1300px) {
+    .auth-links {
+        flex-direction: row;
+    }
+}
 
+
+
+/* ------------------------ Cuisine filter cards ----------------------- */
 
 .cuisine {
+    margin-top: 40px;
     display: flex;
     flex-direction: column;   
     align-items: center;
@@ -213,15 +275,38 @@ i.fas.fa-shopping-cart {
     font-size: 50px;          
     transition: transform 0.2s, filter 0.2s;
     background-color: #f5f5f5;
-    border-radius: 15px;
+    border-radius: 20px;
     padding: 15px;
     width: 90px;
+    border: none;
+    cursor: pointer;
+}
+
+.cuisine.active {
+    background-color: #b8fca1;
+    filter: brightness(1.1);
+}
+
+.cuisine.active .emoji {
+    transform: rotate(-10deg) scale(1.1);
+    display: inline-block;
+}
+
+button.cuisine {
+    text-decoration: none;
+    color: black;
 }
 
 .cuisine span {
     font-size: 16px;
     color: #333;
     margin-top: 8px;
+}
+
+.cuisine .emoji {
+    display: inline-block;
+    transition: transform 0.2s;
+    font-size: 50px;
 }
 
 /* when hovering or pressing */
@@ -231,12 +316,13 @@ i.fas.fa-shopping-cart {
 }
 
 /* slight tilt and highlight on click */
+.cuisine:active .emoji {
+    transform: rotate(-15deg) scale(1.1);
+    display: inline-block;
+}
 .cuisine:active {
-    transform: rotate(-10deg) scale(1.1);
     filter: brightness(1.4);
 }
-
-
 
 .cuisine-wrapper {
     position: relative;
@@ -248,7 +334,7 @@ i.fas.fa-shopping-cart {
 
 .cuisine-list {
     display: flex;
-    gap: 25px;
+    gap: 40px;
     overflow-x: auto;
     scroll-behavior: smooth;
     padding-bottom: 5px;
@@ -291,8 +377,17 @@ i.fas.fa-shopping-cart {
 }
 
 /* Show buttons only on small screens */
-@media (max-width: 991px) {
+@media (max-width: 1300px) {
     .scroll-btn {
         display: block;
     }
+}
+
+
+
+
+.greeting{
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
 }

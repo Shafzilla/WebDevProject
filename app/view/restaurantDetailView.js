@@ -42,7 +42,7 @@ async function fetchDishesByRestaurantId(restaurantId) {
 
             li.innerHTML = `
                 <div class="dish-card-content">
-                    
+                    ${r.image_url ? `<img src="${r.image_url}" alt="${r.name}" class="dish-img mb-3" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px;">` : ''}
                     <div class="d-flex justify-content-between align-items-start">
                         <div class="dish-details flex-grow-1 me-3">
                             <h3>${r.name}</h3>
@@ -50,7 +50,7 @@ async function fetchDishesByRestaurantId(restaurantId) {
                         </div>
                         
                         <div class="price-and-button text-end">
-                            <span class="dish-price">$${r.price}</span>
+                            <span class="dish-price">€${r.price}</span>
                             ${basketButtonHTML}
                         </div>
                     </div>
@@ -83,43 +83,44 @@ function getRestaurantId() {
 
 //Add to basket function
 async function addToBasket(dishId) {
-
-    const response = await fetch("/api/basket", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            user_id: 1, //for testing now, replace with actual user id later
-            dish_id: dishId,
-            quantity: 1
-        })
-    });
-
-    if (response.ok) {
-        alert("Dish added to basket!");
-    } 
-    else {
-        try {
-            const errorData = await response.json();
-            console.error("Error response:", errorData);
-            alert("Failed to add dish: " + (errorData.message || errorData.error || response.statusText));
-        } 
-        catch (e) {
-            console.error("Error parsing response:", e);
-            alert("Failed to add dish: " + response.statusText);
-        }
+    // Check if user is logged in first
+    const isLoggedIn = await isUserLoggedIn();
+    if (!isLoggedIn) {
+        alert("Please log in to add items to your basket");
+        window.location.href = '/login';
+        return;
     }
-}
 
-async function isUserLoggedIn() {
     try {
-        const res = await fetch('/api/user');
-        // If the server returns 200, they are logged in.
-        return res.status === 200;
-    } catch (e) {
-        // Network error or other failure implies logged out.
-        return false;
+        const response = await fetch("/api/basket", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: 'include',
+            body: JSON.stringify({
+                dish_id: dishId
+            })
+        });
+
+        if (response.ok) {
+            alert("Dish added to basket!");
+        } 
+        else {
+            try {
+                const errorData = await response.json();
+                console.error("Error response:", errorData);
+                alert("Failed to add dish: " + (errorData.message || errorData.error || response.statusText));
+            } 
+            catch (e) {
+                console.error("Error parsing response:", e);
+                alert("Failed to add dish: " + response.statusText);
+            }
+        }
+    } catch (error) {
+        console.error("Error adding to basket:", error);
+        alert("Failed to add dish. Please try again.");
     }
 }
+
 
 function renderRestaurantHeader(restaurant) {
     const headerContainer = document.getElementById('restaurant-info');
