@@ -1,10 +1,12 @@
 async function fetchDishesByRestaurantId(restaurantId) {
 
-    const isLoggedIn = await checkLoginStatus();
 
-    const res = await fetch(`/api/restaurants/${restaurantId}/dishes`);
+    const isLoggedIn = await checkLoginStatus(); // checks login status
+
+    const res = await fetch(`/api/restaurants/${restaurantId}/dishes`); // gets data from JSON at API endpoint for specific restaurant
     const data = await res.json();
 
+    // if there are no dishes for the restaurant
     if (data.length === 0) {
 
         const place = document.getElementById('dish-list');
@@ -14,7 +16,7 @@ async function fetchDishesByRestaurantId(restaurantId) {
                 `
         place.appendChild(noDishesText);
     }
-    else {
+    else { // if there are dishes for the restaurant
         const list = document.getElementById('dish-list');
         data.forEach(r => {
             const colDiv = document.createElement('div');
@@ -25,6 +27,7 @@ async function fetchDishesByRestaurantId(restaurantId) {
             li.className = 'menu-list-item p-4 shadow-sm';
 
 
+            // button to add to basket if logged in
             const basketButtonHTML = isLoggedIn
                 ?
                 `<button 
@@ -34,12 +37,13 @@ async function fetchDishesByRestaurantId(restaurantId) {
               </button>
                 
             
-                `
+                ` // button to go to login if not already logged in
                 : `<a href="/login" class="btn btn-sm btn-warning mt-2">
                   Log In to Order
               </a>`;
 
 
+            // html for inside tile
             li.innerHTML = `
                 <div class="dish-card-content">
                     ${r.image_url ? `<img src="${r.image_url}" alt="${r.name}" class="dish-img mb-3" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px;">` : ''}
@@ -66,6 +70,7 @@ async function fetchDishesByRestaurantId(restaurantId) {
     }
 }
 
+//getting the restaurantId from the URL
 function getRestaurantId() {
 
     const path = window.location.pathname;
@@ -121,10 +126,13 @@ async function addToBasket(dishId) {
     }
 }
 
-
+// displaying restaurant information at top
 function renderRestaurantHeader(restaurant) {
     const headerContainer = document.getElementById('restaurant-info');
+
+    // html to display restaurant information in header
     headerContainer.innerHTML = `
+  
         <img src="${restaurant.image_url}" 
              alt="${restaurant.name}" 
              class="img-fluid mb-4" 
@@ -134,6 +142,7 @@ function renderRestaurantHeader(restaurant) {
         `;
 }
 
+// getting data on the restaurant itself
 async function fetchRestaurantDetails(restaurantId) {
     try {
         const res = await fetch('/api/restaurants/');

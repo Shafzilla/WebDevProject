@@ -10,6 +10,8 @@ const jwtExpirySeconds = 300
 
 // ---------------- Restaurants ----------------
 
+
+// puts restaurants data into json response
 const listRestaurants = async(req, res) => {
     try {
         const restaurants = await getAllRestaurants();
@@ -20,7 +22,7 @@ const listRestaurants = async(req, res) => {
     }
 };
 
-
+// puts dishes by restaurantID into json response
 const listDishes = async(req, res) => {
     const restaurantId = req.params.id;
     try {
@@ -32,6 +34,7 @@ const listDishes = async(req, res) => {
     }
 };
 
+// puts dishes by food type into JSON response
 const listDishesByFoodType = async(req, res) => {
     const foodType = req.params.foodType;
     try {
@@ -45,19 +48,22 @@ const listDishesByFoodType = async(req, res) => {
 
 
 
-
+// puts information into json
 async function signUp(req, res) {
 
     const { username, email, password } = req.body;
 
+    // if theres no email or password then error
     if (!email || !password) {
 
         return res.status(400).send('Email and password required');
 
     }
 
+    // hashes password
     const passwordHash = await bcrypt.hash(password, 10);
 
+    // calls sql query with parameters
     await createUser(username, email, passwordHash);
 
     return res.status(200).json({
@@ -68,20 +74,25 @@ async function signUp(req, res) {
 
 }
 
+// checks login details
 async function login(req, res) {
 
     const { username, password } = req.body;
 
+    // calls SQL query to get user details
     const user = await getUserByUsername(username)
 
+    // if theres no user then error
     if (!user) {
 
         return res.status(401).send('User does not exist');
 
     }
 
+    // compares login attempt password with hashed password in DB
     const checkPassword = await bcrypt.compare(password, user.password_hash);
 
+    // if password check is unsuccessful then error
     if (!checkPassword) {
 
         return res.status(401).send('User does not exist');
@@ -90,6 +101,7 @@ async function login(req, res) {
 
     // window.location.href = "/";
 
+    // payload for jwt
     const payload = {
 
         id: user.id,
@@ -97,8 +109,10 @@ async function login(req, res) {
 
     }
 
+    // creates jwt
     const token = jwt.sign(payload, JWT_SECRET, {expiresIn: jwtExpirySeconds, algorithm: 'HS256'});
 
+    // creates cookie
     res.cookie('token', token, {
 
         httpOnly: true,
@@ -108,7 +122,7 @@ async function login(req, res) {
     });
 
 
-
+    // returns success response
     return res.status(200).json({
 
         message: 'login successfull',
@@ -119,10 +133,12 @@ async function login(req, res) {
 
 }
 
+// checks if token in cookie is legitimate
 const authenticateToken = (req, res, next) => {
 
     const token = req.cookies.token;
 
+    // if no token then error
     if (!token) {
 
         return res.status(401).send('No token provided');
@@ -131,6 +147,7 @@ const authenticateToken = (req, res, next) => {
 
     try {
 
+        //checks if token is valid
         const decoded = jwt.verify(token, JWT_SECRET);
 
         req.user = decoded;
@@ -148,6 +165,7 @@ const authenticateToken = (req, res, next) => {
 
 };
 
+// returns user id and username in JSON response
 const getUserDetails = (req, res) => {
 
     if (req.user) {

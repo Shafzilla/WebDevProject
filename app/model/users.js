@@ -1,6 +1,6 @@
 const pool = require('../config/database');
 
-
+//query to insert new user into users table in DB
 async function createUser(username, email, passwordHash){
 
     const queryText = `
@@ -18,7 +18,7 @@ async function createUser(username, email, passwordHash){
 
 }
 
-
+// query to get data of user in users table with specific username
 async function getUserByUsername(username){
 
     const queryText = `

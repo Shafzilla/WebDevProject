@@ -1,11 +1,12 @@
 async function fetchRestaurants() {
 
-    const res = await fetch('/api/restaurants');
+    const res = await fetch('/api/restaurants'); // fetches all restaurants information from json at api endpoint
     const data = await res.json();
     console.log(data);
 
     const list = document.getElementById('restaurant-list');
 
+    // loops through each restaurant
     data.forEach(r => {
         const colDiv = document.createElement('div');
         colDiv.className = 'col';
@@ -31,6 +32,7 @@ async function fetchRestaurants() {
             displayAddress(r.address, addressButton);
         });
 
+        // html for each restaurant inside tile
         li.innerHTML = `
                     <img src="${r.image_url}" alt="${r.name}" class="restaurant-img mb-2">
                     
@@ -49,6 +51,7 @@ async function fetchRestaurants() {
         mainContentDiv.appendChild(addressButton);
         li.querySelector('div').appendChild(addressButton);
 
+        // event listener for click to redirect to restaurant details
         li.addEventListener('click', () => {
             window.location.href = "/restaurants/" + r.id + "/dishes";
             // fetchDishes(r.id, li);
@@ -66,7 +69,7 @@ async function fetchRestaurants() {
     });
 }
 
-
+// function to display address when button is clicked
 function displayAddress(address, buttonElement) {
 
     const addressID = `address-${buttonElement.dataset.restaurantId}`;
@@ -96,7 +99,7 @@ function displayAddress(address, buttonElement) {
 }
 
 
-
+//function for search bar
 function filterRestaurants() {
 
     // parsing the index page into different variables
@@ -107,15 +110,17 @@ function filterRestaurants() {
 
     const colDivs = ul.getElementsByClassName('col');
 
-
+    // goes through all the list items
     for (let i = 0; i < colDivs.length; i++) {
 
         const listItem = colDivs[i].querySelector('.restaurant-item');
+
 
         if (listItem) {
             const restaurantNameElement = listItem.querySelector('h3');
             const nameText = restaurantNameElement ? restaurantNameElement.textContent.toLowerCase() : '';
 
+            //checks if search input is contained in the h3's content
             if (nameText.includes(filter)) {
                 colDivs[i].style.display = "";
             } else {
@@ -257,4 +262,5 @@ async function addToBasketFromFilter(dishId) {
     }
 }
 
+// displays restaurants
 fetchRestaurants();

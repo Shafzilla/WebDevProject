@@ -1,11 +1,12 @@
 const pool = require('../config/database');
 
+// query to get all restaurants from restaurants table
 const getAllRestaurants = async() => {
     const result = await pool.query('SELECT id, name, image_url, cuisine_type, rating, address FROM restaurants ORDER BY id');
     return result.rows;
 };
 
-
+// query to get all dishes with specific restaurantId
 const getDishesByRestaurantId = async(restaurantId) => {
 
     const result = await pool.query(
@@ -14,6 +15,7 @@ const getDishesByRestaurantId = async(restaurantId) => {
     return result.rows;
 };
 
+// query to get all dishes with specific food type
 const getDishesByFoodType = async(foodType) => {
     const query = `
         SELECT 
