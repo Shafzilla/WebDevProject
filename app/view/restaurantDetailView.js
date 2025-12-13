@@ -1,6 +1,6 @@
 async function fetchDishesByRestaurantId(restaurantId) {
 
-    const isLoggedIn = await isUserLoggedIn();
+    const isLoggedIn = await checkLoginStatus();
 
     const res = await fetch(`/api/restaurants/${restaurantId}/dishes`);
     const data = await res.json();
@@ -84,7 +84,7 @@ function getRestaurantId() {
 //Add to basket function
 async function addToBasket(dishId) {
     // Check if user is logged in first
-    const isLoggedIn = await isUserLoggedIn();
+    const isLoggedIn = await checkLoginStatus();
     if (!isLoggedIn) {
         alert("Please log in to add items to your basket");
         window.location.href = '/login';

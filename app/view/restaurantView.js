@@ -167,7 +167,7 @@ async function filterByFoodType(foodType) {
         } 
         else {
             // Check login status once before the loop
-            const isLoggedIn = await isUserLoggedIn();
+            const isLoggedIn = await checkLoginStatus();
             
             dishes.forEach(dish => {
                 const colDiv = document.createElement('div');
@@ -233,14 +233,6 @@ function clearFilter() {
     fetchRestaurants();
 }
 
-async function isUserLoggedIn() {
-    try {
-        const res = await fetch('/api/user');
-        return res.status === 200;
-    } catch (e) {
-        return false;
-    }
-}
 
 async function addToBasketFromFilter(dishId) {
     try {
