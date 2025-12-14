@@ -12,15 +12,13 @@
 ``npm install
 `` in the project root directory
 
-* ****
-
-
 ---
 
 ##  Database
 
-
-* run SQL statements / database dumps
+* Project uses PostgreSQL database
+* run uploaded SQL statements / database dumps in DBeaver or another SQL editor
+* copy and paste the contents from `Restaurant=database.sql` in an SQL editor script if there is any confusion
 
 
 ### Connect server to database
